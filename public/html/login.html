@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Titlu</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="ISO-8859-1">
+  <link rel="stylesheet" href="/css/login.css">
+
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="form">
+      <form class="register-form">
+        <input type="text" placeholder="username" />
+        <input type="password" placeholder="password" />
+
+        <select>
+          <option value="" disabled selected>select your question</option>
+          <option value="q1">What was your first pet name?</option>
+          <option value="q2">What was your childhood nickname?</option>
+          <option value="q3">What primary school did you attend?</option>
+          <option value="q4">In what city did your parents meet?</option>
+          <option value="q5">What time of the day were you born?</option>
+        </select>
+
+        <input type="text" placeholder="answer" />
+        <button>create</button>
+        <p class="message">Already registered? <a class="login" href="#login">Sign In</a></p>
+      </form>
+
+      <form class="changepass-form">
+        <select>
+          <option value="" disabled selected>select your question</option>
+          <option value="q1">What was your first pet name?</option>
+          <option value="q2">What was your childhood nickname?</option>
+          <option value="q3">What primary school did you attend?</option>
+          <option value="q4">In what city did your parents meet?</option>
+          <option value="q5">What time of the day were you born?</option>
+        </select>
+        <input type="text" placeholder="answer" />
+        <input type="text" placeholder="new password" />
+        <button>change password</button>
+        <p class="message">Have you remember? <a class="clogin" href="#login">Sign In</a></p>
+      </form>
+
+      <form class="login-form">
+        <input type="text" placeholder="username" />
+        <input type="password" placeholder="password" />
+        <button>login</button>
+        <p class="message">Not registered? <a class="create" href="#register">Create an account</a></p>
+        <p class="message">Forgot password? <a class="change" href="#changepassword">Change your password</a></p>
+      </form>
+    </div>
+  </div>
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script src="/public/js/login.js"></script>
+</body>
+
+</html>
