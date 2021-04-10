@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta charset="ISO-8859-1">
   <link rel="stylesheet" href="/css/login.css">
+  <link rel="stylesheet" href="/css/login_anim.css">
 
 </head>
 
@@ -13,10 +14,10 @@
   <div class="login-page">
     <div class="form">
       <form class="register-form">
-        <input type="text" placeholder="username" />
-        <input type="password" placeholder="password" />
+        <input type="text" placeholder="username" required/>
+        <input type="password" placeholder="password" required/>
 
-        <select>
+        <select required>
           <option value="" disabled selected>select your question</option>
           <option value="q1">What is the name of your first pet?</option>
           <option value="q2">What was your childhood nickname?</option>
@@ -25,14 +26,14 @@
           <option value="q5">What time of the day were you born?</option>
         </select>
 
-        <input type="text" placeholder="answer" />
-        <button>create</button>
-        <p class="message">Already registered? <a class="login" href="#login">Sign In</a></p>
+        <input type="text" placeholder="answer" required/>
+        <input type="submit" class="createbut" onclick="checkReg()" value="create" />
+        <p class="message">Already registered? <a class="login" href="#">Sign In</a></p>
       </form>
 
       <form class="changepass-form">
-        <input type="text" placeholder="username" />
-        <select>
+        <input type="text" placeholder="username" required/>
+        <select required>
           <option value="" disabled selected>select your question</option>
           <option value="q1">What is the name of your first pet?</option>
           <option value="q2">What was your childhood nickname?</option>
@@ -40,22 +41,36 @@
           <option value="q4">In what city did your parents meet?</option>
           <option value="q5">What time of the day were you born?</option>
         </select>
-        <input type="text" placeholder="answer" />
-        <input type="text" placeholder="new password" />
-        <button>change password</button>
-        <p class="message">Have you remember? <a class="clogin" href="#login">Sign In</a></p>
+        <input type="text" placeholder="answer" required/>
+        <input type="text" placeholder="new password" required/>
+        <input type="submit" class="changepassbut" onclick="checkChpas()" value="change password" />
+        <p class="message">Have you remember? <a class="clogin" href="#">Sign In</a></p>
       </form>
 
       <form class="login-form">
-        <input type="text" placeholder="username" />
-        <input type="password" placeholder="password" />
-        <button>login</button>
-        <p class="message">Not registered? <a class="create" href="#register">Create an account</a></p>
-        <p class="message">Forgot password? <a class="change" href="#changepassword">Change your password</a></p>
+        <input type="text" placeholder="username" required/>
+        <input type="password" placeholder="password" required/>
+        <input type="submit" class="loginbut" value="login" />
+        <p class="message">Not registered? <a class="create" href="#">Create an account</a></p>
+        <p class="message">Forgot password? <a class="change" href="#">Change your password</a></p>
       </form>
     </div>
   </div>
 
+  <div class="presentation">
+    <img class="logo" src="/imgs/whitelogo.svg">
+    <h1 class="speakfreely">Speak Freely</h1>
+    <p>Say "hello" to a different messaging experience. An unexpected focus on privacy, combined with all of the features you expect.</p>
+  </div>
+
+  <div class="earth">
+    <div class="earthshadow"></div>
+  </div>
+  <img class="chaticon" src="/imgs/chatmsg.svg">
+
+  <div class="stars"></div>
+
+  
 
 
 

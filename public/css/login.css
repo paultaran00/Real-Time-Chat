@@ -6,17 +6,26 @@
 html,body{
     height:100%;
     width: 100%;
-    background-color: #f49780ff;
+    background: rgb(1,191,191);
+    background: linear-gradient(90deg, rgba(1,191,191,1) 12%, rgba(244,119,88,1) 56%, rgba(244,151,128,1) 100%);
 }
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 .login-page {
+  position: absolute;
   width: 360px;
-  padding: 8% 0 0;
-  margin: auto;
+  /* padding: 9% 0 0; */
+  /* margin: auto; */
+  
+  top: 50%;
+  transform: translateY(-50%);
+
+  left: 65%;
+
 }
 .form {
+  display: 'block';
   position: relative;
   z-index: 1;
   background: #FFFFFF;
@@ -38,6 +47,7 @@ html,body{
   font-size: 14px;
 }
 
+
 .form select{
   opacity: 70%;
   font-family: "Roboto", sans-serif;
@@ -51,21 +61,24 @@ html,body{
   font-size: 14px;
 }
 
-.form button {
+
+
+form input[type="submit"] {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
+	display: block;
   outline: 0;
-  background: #4CAF50;
-  width: 100%;
   border: 0;
-  padding: 15px;
-  color: #FFFFFF;
-  font-size: 14px;
-  -webkit-transition: all 0.3 ease;
+	width: 100%;
+	padding: 15px;
+	background-color: #4CAF50;
+	-webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
-  cursor: pointer;
+	color: #FFFFFF;
+	font-size: 14px;
+	cursor: pointer;
 }
-.form button:hover,.form button:active,.form button:focus {
+.form input[type="submit"]:hover,.form input[type="submit"]:active,.form input[type="submit"]:focus {
   background: #43A047;
 }
 
@@ -89,4 +102,43 @@ html,body{
 
 .form .changepass-form {
   display: none;
+}
+
+
+.presentation{
+  width: 450px;
+  position: absolute;
+  top: 23%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+}
+
+.logo{
+  position: relative;
+  width:200px;
+  height: auto;
+  left: 50%;
+  transform: translateX(-50%)
+}
+
+.presentation p{
+  font-family: "Roboto", sans-serif;
+	
+  outline: 0;
+  border: 0;
+	width: 100%;
+  font-size: 20px;
+	-webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+	color: #FFFFFF;
+}
+
+.speakfreely{
+  position: relative;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 64px;
+  font-family: "Inter", sans-serif;
+  margin-top: -10%;
+  color: white;
 }
