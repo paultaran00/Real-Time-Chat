@@ -108,14 +108,14 @@ form input[type="submit"] {
 .presentation{
   width: 450px;
   position: absolute;
-  top: 23%;
+  top: 24%;
   left: 20%;
   transform: translate(-50%, -50%);
 }
 
 .logo{
   position: relative;
-  width:200px;
+  width:40%;
   height: auto;
   left: 50%;
   transform: translateX(-50%)
@@ -135,10 +135,12 @@ form input[type="submit"] {
 
 .speakfreely{
   position: relative;
-  font-size: 30px;
-  font-weight: 800;
+  font-size: 180%;
+  font-weight: 750;
   line-height: 64px;
   font-family: "Inter", sans-serif;
   margin-top: -10%;
   color: white;
 }
+
+
