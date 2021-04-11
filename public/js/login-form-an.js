@@ -26,28 +26,31 @@ $(document).ready(function() {
 
 
 //check validation
+
 function checkReg() {
     var regform = $('.register-form');
-    console.log(regform[0].checkValidity());
     if(regform[0].checkValidity()) {
-        $('.createbut').click(function(){
-            $(".register-form").css("display", "none");
-            $(".login-form").css("display", "block");
-        });
+        // $(".register-form").css("display", "none");
+        // $(".login-form").css("display", "block");\
+        $('.register-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
     };
 };
 
 function checkChpas(){
     var regform2 = $('.changepass-form');
-    console.log(regform2[0].checkValidity());
     if(regform2[0].checkValidity()) {
-        $('.changepassbut').click(function(){
-            $(".changepass-form").css("display", "none");
-            $(".login-form").css("display", "block");
-        });
+        // $(".changepass-form").css("display", "none");
+        // $(".login-form").css("display", "block");
+        $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
     };
 };
 
+$(document).ready(function() {
+    checkReg();
+    checkChpas();
+});
 
 
 // var regform3 = $('login-form');
