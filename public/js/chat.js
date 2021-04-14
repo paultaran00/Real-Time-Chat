@@ -196,20 +196,28 @@ $(document).ready(function() {
 });
 
 
-//schimbare online offline
+//functie schimbare status online offline new msg
+
+function status(person, on, newmsg){  // (%person, 1/0, 1/0)
+    if(on==1){
+        $(`.lom:contains("${person}") .on-off`).text('online');
+        $(`.lom:contains("${person}") .fa-circle`).css("color","#43A047");
+    }
+    else{
+        $(`.lom:contains("${person}") .on-off`).text('offline');
+        $(`.lom:contains("${person}") .fa-circle`).css("color","#8d8d8d");
+    }
+    if(newmsg==1){
+        $(`.lom:contains("${person}") .fa-envelope`).css("color","#01bfbf");
+    }
+    else{
+        $(`.lom:contains("${person}") .fa-envelope`).css("color","#01bfbf1a");
+    }  
+};
+
 $(document).ready(function() {
-    $('.lom:contains("@szucseduard") .on-off').text("online");
-    $('.lom:contains("@szucseduard") .fa-circle').css("color","#43A047");
-
-    $('.lom:contains("@tacotaalexandru") .on-off').text("online");
-    $('.lom:contains("@tacotaalexandru") .fa-circle').css("color","#43A047");
-    $('.lom:contains("@tacotaalexandru") .fa-envelope').css("color","#01bfbf");
-    
-
-    $('.lom:contains("@ionutd") .on-off').text("offline");
-    $('.lom:contains("@ionutd") .fa-envelope').css("color","#01bfbf");
-
-
-    $('.lom:contains("@alexandrabaciu") .on-off').text("online");
-    $('.lom:contains("@alexandrabaciu") .fa-circle').css("color","#43A047");
+    status("@szucseduard", 1, 0);
+    status("@tacotaalexandru", 1, 1);
+    status("@ionutd", 0, 1);
+    status("@alexandrabaciu", 1, 0);
 });
