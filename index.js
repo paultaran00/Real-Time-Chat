@@ -17,6 +17,15 @@ app.get('/', function(request, response){
     response.sendFile(__dirname + '/public/html/login.html');
 });
 
+// app.get('/addgroup', function(request, response){
+//     var usr=request.query.group_name;
+
+//     console.log(usr);
+//     response.send("strriung");
+// });
+
+
 http.listen(80, () => {
 	console.log('listening on *:80');
 }); 
+

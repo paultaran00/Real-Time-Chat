@@ -23,7 +23,27 @@
     display: block;
     border-radius: 40px;
     animation: rotateElement linear 25s infinite;
-    box-shadow: 0px 75px 0 -5px #85c567, 5px 35px 0 -3px #85c567, 35px 125px 0 -9px #85c567, 120px -15px 0 -7px #85c567, 135px -55px 0 -9px #85c567, 150px 25px 0 7px #85c567, 220px 70px 0 -2px #85c567, 235px -35px 0 -3px #85c567, 280px 85px 0 3px #85c567, 320px 30px 0 1px #85c567, 400px 0 0 0 #85c567, 400px 75px 0 -5px #85c567, 405px 35px 0 -3px #85c567, 435px 125px 0 -9px #85c567, 520px -15px 0 -7px #85c567, 535px -55px 0 -9px #85c567, 550px 25px 0 7px #85c567, 620px 70px 0 -2px #85c567, 635px -35px 0 -3px #85c567, 680px 85px 0 3px #85c567, 720px 30px 0 1px #85c567;
+    box-shadow: 0px 75px 0 -5px #85c567,
+        5px 35px 0 -3px #85c567,
+        35px 125px 0 -9px #85c567,
+        120px -15px 0 -7px #85c567,
+        135px -55px 0 -9px #85c567,
+        150px 25px 0 7px #85c567,
+        220px 70px 0 -2px #85c567,
+        235px -35px 0 -3px #85c567,
+        280px 85px 0 3px #85c567,
+        320px 30px 0 1px #85c567,
+        400px 0 0 0 #85c567,
+        400px 75px 0 -5px #85c567,
+        405px 35px 0 -3px #85c567,
+        435px 125px 0 -9px #85c567,
+        520px -15px 0 -7px #85c567,
+        535px -55px 0 -9px #85c567,
+        550px 25px 0 7px #85c567,
+        620px 70px 0 -2px #85c567,
+        635px -35px 0 -3px #85c567,
+        680px 85px 0 3px #85c567,
+        720px 30px 0 1px #85c567;
 }
 
 /* Clouds */
