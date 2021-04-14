@@ -98,11 +98,13 @@ $(document).ready(function() {
 });
 
 
+
+
 //add name to chat when you click on li
 
 $(document).ready(function() {
     $('.lom').click(function(){
-        var username = $(this).text();
+        var username = $(this).contents()[0].nodeValue.trim();
         $('.om').remove();
         $('.grup').remove();
         var omdiv = `<div class="om">${username}</div>`;
@@ -111,6 +113,10 @@ $(document).ready(function() {
         $('.people').css('background','#5154638c');
         $('.people_menu').hide();
         $('.people').show();
+        if ($('.begin').is(':visible')){
+            $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
+            $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
+        };
     });
 });
 
@@ -127,6 +133,10 @@ $(document).ready(function() {
         $('.people').css('background','#5154638c');
         $('.people_menu').show();
         $('.people').show();
+        if ($('.begin').is(':visible')){
+            $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
+            $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
+        };
     });
     
 });
@@ -139,7 +149,7 @@ function insert_message(){
         $('.sendmsg_input').val(''); 
         var limesaj = `<li class="left_msg"><div class="msg">${mesaj}</div></li>`;
         $(".chat").append(limesaj);
-        document.querySelector(".chat-container").scrollTo(0,document.body.scrollHeight);
+        document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
     };
 }
 
@@ -171,6 +181,7 @@ $(document).ready(function() {
     });
 });
 
+// se ascund windowurile
 $(document).ready(function() {
     $('.sendmsg_input, .lgrup, .lom, .search, .background_pattern, .group-list').click(function(){
         if ($('.group_users').is(':visible')){
@@ -184,3 +195,21 @@ $(document).ready(function() {
     });
 });
 
+
+//schimbare online offline
+$(document).ready(function() {
+    $('.lom:contains("@szucseduard") .on-off').text("online");
+    $('.lom:contains("@szucseduard") .fa-circle').css("color","#43A047");
+
+    $('.lom:contains("@tacotaalexandru") .on-off').text("online");
+    $('.lom:contains("@tacotaalexandru") .fa-circle').css("color","#43A047");
+    $('.lom:contains("@tacotaalexandru") .fa-envelope').css("color","#01bfbf");
+    
+
+    $('.lom:contains("@ionutd") .on-off').text("offline");
+    $('.lom:contains("@ionutd") .fa-envelope').css("color","#01bfbf");
+
+
+    $('.lom:contains("@alexandrabaciu") .on-off').text("online");
+    $('.lom:contains("@alexandrabaciu") .fa-circle').css("color","#43A047");
+});

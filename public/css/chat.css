@@ -66,6 +66,36 @@ body {
     box-sizing: border;
     float: right;
     z-index: 2;
+    display: none;
+}
+
+.begin{
+    position: absolute;
+    height: 100%;
+    width: 68%;
+    transform: translateX(42%);
+    background: #44475349;
+    box-sizing: border;
+    float: right;
+    z-index: 2;
+    /* display: none; */
+    border-radius: 10px;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+}
+
+.begin_text{
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 120%;
+}
+.begin_text p{
+    
+    font-size: 120%;
 }
 
 .background_pattern {
@@ -169,8 +199,9 @@ body {
 
 }
 
+
 .fa-chevron-down{
-    left: 92%;
+    /* left: 92%; */
     top: 3.2%;
     position: absolute;
     /* transform: scale(2); */
@@ -450,14 +481,16 @@ body {
 .fa-circle{
     display: flex;
     position: absolute;
-    color: #43A047;
+    /* color: #43A047; */
+    color: #8d8d8d;
     margin-right: 10%;
     margin-left: 30%;
 }
 
 .fa-envelope{
     position: absolute;
-    color: #01BFBF;
+    color: #01bfbf1a;
+    /* color: #01bfbf; */
     left: 90%;
 }
 

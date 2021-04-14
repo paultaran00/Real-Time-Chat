@@ -14,7 +14,7 @@ app.use("/public", express.static('./public/'));
 
 
 app.get('/', function(request, response){
-    response.sendFile(__dirname + '/public/html/login.html');
+    response.sendFile(__dirname + '/public/html/chat.html');
 });
 
 // app.get('/addgroup', function(request, response){
