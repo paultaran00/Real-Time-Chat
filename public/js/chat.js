@@ -77,7 +77,8 @@ function add_group_to_list(){
         var gname = $('.creategroup-name').val();
         // console.log(gname);
         var users = $('.creategroup-users').val();
-        var gdiv = `<li class="lgrup">${gname}<div class="new"></div></li>`;
+        var gdiv = `<li class="lgrup">${gname}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
+        
         $(".group-list").prepend(gdiv);
 
         // $.ajax({
@@ -116,7 +117,7 @@ $(document).ready(function() {
 //add group to chat when you click on li
 
 $(document).ready(function() {
-    $('.lgrup').click(function(){
+    $(document).on('click', '.lgrup', function() {
         var username = $(this).text();
         $('.om').remove();
         $('.grup').remove();
@@ -127,6 +128,7 @@ $(document).ready(function() {
         $('.people_menu').show();
         $('.people').show();
     });
+    
 });
 
 //functie insert mesage

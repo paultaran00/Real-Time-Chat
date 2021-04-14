@@ -174,7 +174,7 @@ body {
     top: 3.2%;
     position: absolute;
     /* transform: scale(2); */
-    color: #F49780;
+    color: #01BFBF;
     z-index: 4;
     cursor: pointer;
     
@@ -433,7 +433,7 @@ body {
 
 }
 
-.chat-list li:hover {
+.chat-list li:hover, .group-list li:hover {
     background: #ffffff;
 }
 
@@ -461,7 +461,12 @@ body {
     left: 90%;
 }
 
-
+.on-off{
+    position: absolute;
+    top: -10%;
+    left: 120%;
+    color: #52545f;
+}
 
 
 
