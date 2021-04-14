@@ -299,7 +299,7 @@ body {
     /* display: inline-block; */
     position: relative;
     margin-top: 15px;
-    margin-right: 50%;
+    margin-right: 46%;
     margin-left: 2%;
     max-width: 90%;
 
@@ -321,8 +321,9 @@ body {
     float: right;
     /* display: inline-block; */
     position: relative;
+    max-width: 90%;
     margin-top: 15px;
-    margin-left: 20%;
+    margin-left: 46%;
     margin-right: 10px;
     padding: 1%;
     color: #52545f;
