@@ -144,7 +144,6 @@ $(document).ready(function() {
 //functie insert mesage
 function insert_message(){
     if( $(".sendmsg_input").val().length > 0){
-        console.log($(".sendmsg_input").val().length);
         var mesaj = $(".sendmsg_input").val();
         $('.sendmsg_input').val(''); 
         var limesaj = `<li class="left_msg"><div class="msg">${mesaj}</div></li>`;
@@ -194,6 +193,7 @@ $(document).ready(function() {
         }
     });
 });
+
 
 
 //functie schimbare status online offline new msg

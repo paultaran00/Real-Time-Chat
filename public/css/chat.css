@@ -174,7 +174,7 @@ body {
     min-width: 0%;
     max-width: 90%;
     top: .5%;
-    right: 5.5%;
+    right: 6%;
     z-index: 2;
     /* background: #5154638c; */
     border-radius: 10px;
@@ -184,11 +184,12 @@ body {
     padding-right: 2%;
     padding-left: 2%;
     /* display: none; */
+    
 
 }
 
 .people_menu{
-    left: 91.5%;
+    left: 91%;
     top: 2.5%;
     position: absolute;
     transform: scale(2);
@@ -197,6 +198,7 @@ body {
     cursor: pointer;
     /* transform: rotate(180deg); */
     display: none;
+    
 
 }
 
@@ -227,6 +229,8 @@ body {
         transform: rotate(180deg);
     }
 }
+
+
 
 .group_users{
     position: absolute;

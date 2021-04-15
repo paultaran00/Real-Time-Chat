@@ -34,6 +34,7 @@ function checkReg() {
         // $(".login-form").css("display", "block");\
         $('.register-form').animate({height: "toggle", opacity: "toggle"}, "slow");
         $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        atentionare("Account created");
     };
 };
 
@@ -44,6 +45,7 @@ function checkChpas(){
         // $(".login-form").css("display", "block");
         $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
         $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        atentionare("Password changed");
     };
 };
 
@@ -53,9 +55,14 @@ $(document).ready(function() {
 });
 
 
-// var regform3 = $('login-form');
-// if(regform3[0].checkValidity()) {
-//     $('loginbut').click(function(){
-//         window.location='http://www.google.com';
-//     });
-// };
+//account created/ passowrd changed pe formul de login dupa ce se completeaza formurile
+function atentionare(care) {
+    $('.attention').text(`${care}`);
+    $('.attention').animate({height: "toggle", opacity: "toggle"}, "fast");
+    setTimeout('hide()',3000);
+  
+};
+function hide(){
+    $('.attention').animate({height: "toggle", opacity: "toggle"}, "fast");
+    
+};
