@@ -17,10 +17,11 @@
   <div class="login-page">
     <div class="form">
       <form class="register-form">
-        <input type="text" placeholder="username" required />
-        <input type="password" placeholder="password" required />
+        <div class="attention"></div>
+        <input type="text" class="reg_username" placeholder="username" required />
+        <input type="password" class="reg_password" placeholder="password" required />
 
-        <select required>
+        <select class="reg_question" required>
           <option value="" disabled selected>select your question</option>
           <option value="q1">What is the name of your first pet?</option>
           <option value="q2">What was your childhood nickname?</option>
@@ -29,12 +30,13 @@
           <option value="q5">What time of the day were you born?</option>
         </select>
 
-        <input type="text" placeholder="answer" required />
-        <input type="submit-norefresh" class="createbut" onclick="checkReg()" value="create" readonly/>
+        <input type="text" class="reg_answer" placeholder="answer" required />
+        <input type="submit-norefresh" class="reg_create" onclick="checkReg()" value="create" readonly/>
         <p class="message">Already registered? <a class="login" href="#">Sign In</a></p>
       </form>
 
       <form class="changepass-form">
+        <div class="attention"></div>
         <input type="text" placeholder="username" required />
         <select required>
           <option value="" disabled selected>select your question</option>
@@ -81,7 +83,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-  <script src="/public/js/login-form-an.js"></script>
+  <script src="/js/login.js"></script>
 </body>
 
 </html>

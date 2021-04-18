@@ -3,15 +3,7 @@
 $(document).ready(function() {     
     $('.create-group').click(function(){
         
-        if( $('.creategroup-window').is(':visible') ) {
-            // $(".creategroup-window").hide();
-            $('.creategroup-window').animate({opacity: "toggle"}, "slow");
-        }
-        else {
-            
-            // $(".creategroup-window").show();
-            $('.creategroup-window').animate({opacity: "toggle"}, "slow");
-        }
+        $('.creategroup-window').animate({opacity: "toggle"}, "slow");
             
     });
 });
