@@ -100,21 +100,52 @@ function checkReg() {
 //REGISTER END
 
 
+
+//LOGIN 
+var usr;
+function loginacc() {
+    
+    var user = $('.login_username').val();
+    var pass = $('.login_password').val();
+    usr = user;
+    $.ajax({
+        url: "/login",
+        type: "POST",
+        dataType: 'text',
+        data: {username:user, password:pass},
+        success: function (res){
+            if(res == "not_exist"){
+                atentionare("User does not exist");
+            } else if (res == "pass_incorrect") {
+                atentionare("Incorrect password");
+            } 
+            else if (res == "pass_correct"){
+                window.location.replace("../html/chat.html");
+            }
+        }
+    });
+
+}
+//LOGIN END
+
+
+
+
+
 function checkChpas(){
     var regform2 = $('.changepass-form');
     if(regform2[0].checkValidity()) {
-        // $(".changepass-form").css("display", "none");
-        // $(".login-form").css("display", "block");
         $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
         $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
         atentionare("Password changed");
     };
 };
 
-$(document).ready(function() {
-    checkReg();
-    checkChpas();
-});
+// $(document).ready(function() {
+//     checkReg();
+//     checkChpas();
+//     loginacc();
+// });
 
 
 //account created/ passowrd changed pe formul de login dupa ce se completeaza formurile
@@ -126,6 +157,5 @@ function atentionare(care) {
 };
 function hide(){
     $('.attention').animate({height: "toggle", opacity: "toggle"}, "fast");
-    
 };
 

@@ -17,10 +17,16 @@ app.use(express.urlencoded({
 const uri ="mongodb://localhost:27017";
 var MongoClient = mongo.MongoClient;
 
-
-
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	cookie: { maxAge: 3600000 },
+	saveUninitialized: true
+}));
 
 app.get('/', function(request, response){
+    if (request.session.username!=undefined)
+		return response.redirect("/home")
     response.sendFile(__dirname + '/public/html/login.html');
 });
 
@@ -70,21 +76,21 @@ app.post('/reg', function(request, response){
     var user = request.body.username;
     
         MongoClient.connect(uri, function(err, db) {
-        var dbc = db.db("chat");
-        var a = 0;
-        dbc.collection("accounts").find({username: user}).toArray(function (err, result){
-            console.log(result);
-            a = result.length;
-            if(a==1){
-                response.send("already_exist");
-            }
-            else{
-                response.send("succes");
-            }
-        });
-            
-        db.close();
-	});
+            var dbc = db.db("chat");
+            var a = 0;
+            dbc.collection("accounts").find({username: user}).toArray(function (err, result){
+                console.log(result);
+                a = result.length;
+                if(a==1){
+                    response.send("already_exist");
+                }
+                else{
+                    response.send("succes");
+                }
+            });
+                
+            db.close();
+	    });
 });
 
 
@@ -108,6 +114,55 @@ app.post('/regadd', function(request, response){
 //REGISTER END
 
 
+//LOGIN
+app.post("/login", function(request,response){ 
+    var user = request.body.username; 
+    var pass = request.body.password;
+
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("accounts").find({username: { $eq: user}}).toArray(function (err, result){
+            len = result.length;
+            if(len == 0){
+                response.send("not_exist");
+            }
+            else{
+                var a = result[0];
+                if(pass == a.password){
+                    request.session.username=user;
+                    response.send("pass_correct");
+                    
+                    // return response.redirect("/home")
+                }
+                else{
+                    response.send("pass_incorrect");
+                }
+            }
+            
+        });
+
+        db.close();
+    });
+
+});
+//LOGIN END
+
+
+app.post("/getusername", function(request,response){ 
+    response.send(request.session.username);
+
+});
+
+app.get('/home', function(req, res){
+    if (req.session.username==undefined)
+	    return res.redirect("/")
+	res.sendFile(__dirname + '/public/html/chat.html');
+});
+
+
+app.get('/logout', function(req, res){
+    req.session.username.destroy();
+});
 
 
 // app.get('/reg', function(request, response){

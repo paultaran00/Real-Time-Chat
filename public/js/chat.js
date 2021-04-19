@@ -1,4 +1,18 @@
+$(document).ready(function() { 
+    $.ajax({
+        url: "/getusername",
+        type: "POST",
+        dataType: 'text',
+        success: function (res){
+            console.log(res);
+            u = `<div class="username">${res}</div>`;
+            $(".myusername-container").append(u);
+        }
+    });
 
+
+    
+});
 // functie care deschide window-ul create group la apasarea butonului
 $(document).ready(function() {     
     $('.create-group').click(function(){
@@ -212,4 +226,18 @@ $(document).ready(function() {
     status("@tacotaalexandru", 1, 1);
     status("@ionutd", 0, 1);
     status("@alexandrabaciu", 1, 0);
+});
+
+
+//logout
+
+$(document).ready(function() {
+    $('.logout').click(function(){
+        $.ajax({
+            url: "/logout",
+            type: "POST",
+            dataType: 'text'
+        });
+        window.location.replace("../html/login.html");
+    });
 });
