@@ -26,7 +26,7 @@ app.use(session({
 
 app.get('/', function(request, response){
     if (request.session.username!=undefined)
-		return response.redirect("/home")
+		return response.redirect("/chat")
     response.sendFile(__dirname + '/public/html/login.html');
 });
 
@@ -132,7 +132,7 @@ app.post("/login", function(request,response){
                     request.session.username=user;
                     response.send("pass_correct");
                     
-                    // return response.redirect("/home")
+                    // return response.redirect("/chat")
                 }
                 else{
                     response.send("pass_incorrect");
@@ -153,7 +153,7 @@ app.post("/getusername", function(request,response){
 
 });
 
-app.get('/home', function(req, res){
+app.get('/chat', function(req, res){
     if (req.session.username==undefined)
 	    return res.redirect("/")
 	res.sendFile(__dirname + '/public/html/chat.html');
@@ -165,41 +165,6 @@ app.get('/logout', function(req, res){
 });
 
 
-<<<<<<< HEAD
-//LOGIN
-
-app.post("/login", function(request,response){ 
-    var user = request.body.username; 
-    var pass = request.body.password;
-
-    MongoClient.connect(uri, function(err, db) {
-        var dbc = db.db("chat");
-        dbc.collection("accounts").find({username: { $eq: user}}).toArray(function (err, result){
-            len = result.length;
-            if(len == 0){
-                response.send("not_exist");
-            }
-            else{
-                var a = result[0];
-                if(pass == a.password){
-                    response.send("pass_correct");
-                }
-                else{
-                    response.send("pass_incorrect");
-                }
-            }
-
-        });
-
-        db.close();
-    });
-
-});
-//LOGIN END
-
-
-=======
->>>>>>> c4467bbc62ae61a68c70bf3d420f830b6d47a54d
 // app.get('/reg', function(request, response){
     
 //     var user=request.query.username;

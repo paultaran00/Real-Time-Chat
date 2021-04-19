@@ -100,7 +100,6 @@ function checkReg() {
 //REGISTER END
 
 
-<<<<<<< HEAD
 
 //LOGIN 
 var usr;
@@ -109,22 +108,12 @@ function loginacc() {
     var user = $('.login_username').val();
     var pass = $('.login_password').val();
     usr = user;
-=======
-<<<<<<< HEAD
-//LOGIN 
-
-function loginacc() {
-    var user = $('.login_username').val();
-    var pass = $('.login_password').val();
-
->>>>>>> 64c940227e530544dc119c6f5ee74b2911d25d01
     $.ajax({
         url: "/login",
         type: "POST",
         dataType: 'text',
         data: {username:user, password:pass},
         success: function (res){
-<<<<<<< HEAD
             if(res == "not_exist"){
                 atentionare("User does not exist");
             } else if (res == "pass_incorrect") {
@@ -133,9 +122,6 @@ function loginacc() {
             else if (res == "pass_correct"){
                 window.location.replace("../html/chat.html");
             }
-=======
-            console.log(res);
->>>>>>> 64c940227e530544dc119c6f5ee74b2911d25d01
         }
     });
 
@@ -146,13 +132,6 @@ function loginacc() {
 
 
 
-<<<<<<< HEAD
-=======
-
-
-=======
->>>>>>> c4467bbc62ae61a68c70bf3d420f830b6d47a54d
->>>>>>> 64c940227e530544dc119c6f5ee74b2911d25d01
 function checkChpas(){
     var regform2 = $('.changepass-form');
     if(regform2[0].checkValidity()) {
@@ -162,22 +141,11 @@ function checkChpas(){
     };
 };
 
-<<<<<<< HEAD
 // $(document).ready(function() {
 //     checkReg();
 //     checkChpas();
 //     loginacc();
 // });
-=======
-$(document).ready(function() {
-    checkReg();
-    checkChpas();
-<<<<<<< HEAD
-    loginacc();
-=======
->>>>>>> c4467bbc62ae61a68c70bf3d420f830b6d47a54d
-});
->>>>>>> 64c940227e530544dc119c6f5ee74b2911d25d01
 
 
 //account created/ passowrd changed pe formul de login dupa ce se completeaza formurile
