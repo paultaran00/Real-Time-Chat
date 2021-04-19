@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="ISO-8859-1">
+  <link rel="stylesheet" href="/css/login.css">
+  <link rel="stylesheet" href="/css/login_anim.css">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="form">
+      <form class="register-form">
+        <div class="attention"></div>
+        <input type="text" class="reg_username" placeholder="username" required />
+        <input type="password" class="reg_password" placeholder="password" required />
+
+        <select class="reg_question" required>
+          <option value="" disabled selected>select your question</option>
+          <option value="q1">What is the name of your first pet?</option>
+          <option value="q2">What was your childhood nickname?</option>
+          <option value="q3">What primary school did you attend?</option>
+          <option value="q4">In what city did your parents meet?</option>
+          <option value="q5">What time of the day were you born?</option>
+        </select>
+
+        <input type="text" class="reg_answer" placeholder="answer" required />
+        <input type="submit-norefresh" class="reg_create" onclick="checkReg()" value="create" readonly/>
+        <p class="message">Already registered? <a class="login" href="#">Sign In</a></p>
+      </form>
+
+      <form class="changepass-form">
+        <div class="attention"></div>
+        <input type="text" placeholder="username" required />
+        <select required>
+          <option value="" disabled selected>select your question</option>
+          <option value="q1">What is the name of your first pet?</option>
+          <option value="q2">What was your childhood nickname?</option>
+          <option value="q3">What primary school did you attend?</option>
+          <option value="q4">In what city did your parents meet?</option>
+          <option value="q5">What time of the day were you born?</option>
+        </select>
+        <input type="text" placeholder="answer" required />
+        <input type="text" placeholder="new password" required />
+        <input type="submit-norefresh" class="changepassbut" onclick="checkChpas()" value="change password" readonly/>
+        <p class="message">Have you remember? <a class="clogin" href="#">Sign In</a></p>
+      </form>
+
+      <form class="login-form">
+        <div class="attention"></div>
+        <input type="text" placeholder="username" class="login_username" required />
+        <input type="password" placeholder="password" class="login_password"  required />
+        <input type="submit" onclick="loginacc()" class="loginbut" value="login" />
+        <p class="message">Not registered? <a class="create" href="#">Create an account</a></p>
+        <p class="message">Forgot password? <a class="change" href="#">Change your password</a></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="presentation">
+    <img class="logo" src="/imgs/whitelogo.svg">
+    <h1 class="speakfreely">Speak Freely</h1>
+    <p>Say "hello" to a different messaging experience. An unexpected focus on privacy, combined with all of the
+      features you expect.</p>
+  </div>
+
+  <div class="earth">
+    <div class="earthshadow"></div>
+  </div>
+  <img class="chaticon" src="/imgs/chatmsg.svg">
+
+  <div class="stars"></div>
+
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script src="/js/login.js"></script>
+</body>
+
+</html>

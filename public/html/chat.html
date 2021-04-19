@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chat</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="ISO-8859-1">
+    <link rel="stylesheet" href="/css/chat.css">
+    <link rel="stylesheet" href="/css/chat_button.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="chat-page">
+        
+        <div class="left">
+            <!-- partea stanga -->
+            <div class="left-background"></div>
+            <div class="left_background_pattern"></div>
+            <div class="upper">
+                
+                
+                <!-- stanga sus -->
+                <div class="search-container">
+                    <input class="search" type="text" placeholder="Search by @username">
+                    <i class="fa fa-search"></i>
+                </div>
+
+                <div class="myusername-container">
+                                                                <!-- aici se da append la username-ul persoanei conectate -->
+                    <div class="username">@paultaran</div>   <!-- test -->
+                </div>
+
+                <input type="submit" class="logout" onclick="" value="logout" />
+                
+            </div>
+            <div class="bottom">
+                <!-- stanga jos -->
+                <div class="upper-frecvente">
+                    <div class="frec_chat">chats</div>
+                    <div class="frec_groups">groups</div>
+                    <div class="cgbtn">
+                        <div class="toggle-body">
+                            <div class="toggle-btn"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="frecvente">          <!-- aici o sa se bage cu persoanele si grupurile frecventate -->
+                    <ul class="chat-list">
+                        <li class="lom">@szucseduard<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@tacotaalexandru<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@alexdwa<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@ionutd<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@andreeamaria<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@alexandrabaciu<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@mirelgogu<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@ionachebrih<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@catalinmares<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@mariagogu<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@elizaebrih<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                        <li class="lom">@paulares<div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>
+                    </ul>
+
+                    <ul class="group-list">
+                        <li class="lgrup">Grupul1<div class="status"><div class="fas fa-envelope"></div></div></li>
+                        <li class="lgrup">Grupul2<div class="status"><div class="fas fa-envelope"></div></div></li>
+                        <li class="lgrup">Grupul1<div class="status"><div class="fas fa-envelope"></div></div></li>
+                        <li class="lgrup">Grupul2<div class="status"><div class="fas fa-envelope"></div></div></li>
+                        <li class="lgrup">Grupul1<div class="status"><div class="fas fa-envelope"></div></div></li>
+                        <li class="lgrup">Grupul2<div class="status"><div class="fas fa-envelope"></div></div></li>
+                        
+                    </ul>
+                                           
+
+                </div>
+
+                <div class="creategroup-window">
+                    <form  class="creategroup-form" >
+                        <input type="text" placeholder="Group name" class="creategroup-name" required />
+                        <input type="text" placeholder="Add users by @username" class="creategroup-users" required />
+                        <input type="submit_norefresh" onclick="add_group_to_list()"class="submit-group" value="create group" readonly/>
+                    </form>
+                </div>
+
+                <input type="submit_norefresh" class="create-group" value="create a group" readonly/>
+            </div>
+
+
+        </div>
+
+        <div class="begin">
+            <div class="background_pattern"></div>
+            <div class="begin_text">
+                <h1 class="speakfreely">Hi there</h1>
+                <p>Here you can speak freely, everything it's encrypted properly by using salted hashing cryptography method which is the best way to protect your data.</p>
+            </div>
+        </div>
+        <div class="right">
+            <div class="people_menu"><i class="fas fa-chevron-down"></i></div>
+            <ul class="group_users">
+                <li class="group_usr">@paultaran</li>
+                <li class="group_usr">@szucseduard</li>
+                <li class="group_usr">@tacotaalexandru</li>
+            </ul>
+            <div class="people">
+                    
+                    
+                <!-- aici o sa fie appenduiti divurile cu oamenii din chat -->
+
+            </div>
+            <div class="chat-container">
+                
+                <div class="background_pattern"></div>
+                <ul class="chat">
+                    <li class="left_msg"><div class="msg">Lorem Ipsum is simply dummy text of the printing</div></li>
+                    <li class="left_msg"><div class="msg">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</div></li>
+                    <li class="right_msg"><div class="msg">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical</div></li>
+                    <li class="left_msg"><div class="msg">There are many variations of passages of Lorem Ipsum</div></li>
+                    <li class="right_msg"><div class="msg">hi</div></li>
+                </ul>
+                                    
+                <!-- chat( o sa fie appenduite divurile cu mesajele(float left si right)) -->
+
+            </div>
+
+            <div class="chat-bottom">
+                <!-- chat jos -->
+                <div class="sendmsg-container">
+                    <input class="sendmsg_input" type="text" placeholder="Send a message">
+                    <i class="fas fa-paper-plane"></i> 
+                    
+                </div>
+            </div>
+
+
+        </div>
+        
+    </div>
+    
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/js/chat.js"></script>
+</body>
+
+</html>
