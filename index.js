@@ -110,6 +110,7 @@ app.post('/regadd', function(request, response){
 
 
 
+<<<<<<< HEAD
 //LOGIN
 
 app.post("/login", function(request,response){ 
@@ -142,6 +143,8 @@ app.post("/login", function(request,response){
 //LOGIN END
 
 
+=======
+>>>>>>> c4467bbc62ae61a68c70bf3d420f830b6d47a54d
 // app.get('/reg', function(request, response){
     
 //     var user=request.query.username;

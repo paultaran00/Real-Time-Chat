@@ -100,6 +100,7 @@ function checkReg() {
 //REGISTER END
 
 
+<<<<<<< HEAD
 //LOGIN 
 
 function loginacc() {
@@ -125,6 +126,8 @@ function loginacc() {
 
 
 
+=======
+>>>>>>> c4467bbc62ae61a68c70bf3d420f830b6d47a54d
 function checkChpas(){
     var regform2 = $('.changepass-form');
     if(regform2[0].checkValidity()) {
@@ -139,7 +142,10 @@ function checkChpas(){
 $(document).ready(function() {
     checkReg();
     checkChpas();
+<<<<<<< HEAD
     loginacc();
+=======
+>>>>>>> c4467bbc62ae61a68c70bf3d420f830b6d47a54d
 });
 
 
