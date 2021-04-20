@@ -135,9 +135,46 @@ function loginacc() {
 function checkChpas(){
     var regform2 = $('.changepass-form');
     if(regform2[0].checkValidity()) {
-        $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
-        $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
-        atentionare("Password changed");
+        
+        var user = $('.Cpass_username').val();
+        var question = $('.Cpass_question').val();
+        var answer = $('.Cpass_answer').val();
+        var newpass = $('.Cpass_newpass').val();
+        $.ajax({
+            url: "/changepass",
+            type: "POST",
+            dataType: 'text',
+            data: {username:user, question:question, answer:answer},
+            success: function (res){
+                if(res == "not_exist"){
+                    atentionare("User does not exist");
+                } else if (res == "question_incorrect") {
+                    atentionare("Incorrect question");
+                } else if (res == "answer_incorrect") {
+                    atentionare("Incorrect answer");
+                }else if (res == "succes") {
+                    $.ajax({
+                        url: "/changepasdatabase",
+                        type: "POST",
+                        dataType: 'text',
+                        data: {username:user, password:newpass},
+                        success: function (res){
+                            atentionare("Password succesfully changed");
+                            $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+                            $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+                            
+                        }
+                    });
+                    
+                }
+
+            }
+        });
+
+    }else{
+        if ($('.changepass-form').is(':visible')){
+            atentionare("Fill up every container");
+        };
     };
 };
 

@@ -147,6 +147,56 @@ app.post("/login", function(request,response){
 //LOGIN END
 
 
+//CHANGE PASSWORD
+app.post("/changepass", function(request,response){
+    var user=request.body.username;
+    var question=request.body.question;
+    var answer=request.body.answer;
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("accounts").find({username: { $eq: user}}).toArray(function (err, result){
+            len = result.length;
+            if(len == 0){
+                response.send("not_exist");
+            }
+            else{
+                var a = result[0];
+                if(question == a.question){
+                    if(answer == a.answer){
+                        response.send("succes");
+                    }
+                    else{
+                        response.send("answer_incorrect");
+                    }
+
+                }
+                else{
+                    response.send("question_incorrect");
+                }
+            }
+
+        });
+
+        db.close();
+    });
+
+
+});
+
+app.post("/changepasdatabase", function(request,response){
+    var user=request.body.username;
+    var newpass=request.body.password;
+
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("accounts").updateOne({username: { $eq: user}},{$set: { password : newpass}});
+        db.close();
+    });
+});
+//CHANGE PASSWORD END
+
+
+
 app.post("/getusername", function(request,response){ 
     response.send(request.session.username);
 
