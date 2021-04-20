@@ -37,8 +37,8 @@
 
       <form class="changepass-form">
         <div class="attention"></div>
-        <input type="text" placeholder="username" required />
-        <select required>
+        <input type="text" placeholder="username" class="Cpass_username" required />
+        <select required class="Cpass_question">
           <option value="" disabled selected>select your question</option>
           <option value="q1">What is the name of your first pet?</option>
           <option value="q2">What was your childhood nickname?</option>
@@ -46,8 +46,8 @@
           <option value="q4">In what city did your parents meet?</option>
           <option value="q5">What time of the day were you born?</option>
         </select>
-        <input type="text" placeholder="answer" required />
-        <input type="text" placeholder="new password" required />
+        <input type="text" placeholder="answer" class="Cpass_answer" required />
+        <input type="text" placeholder="new password" class="Cpass_newpass" required />
         <input type="submit-norefresh" class="changepassbut" onclick="checkChpas()" value="change password" readonly/>
         <p class="message">Have you remember? <a class="clogin" href="#">Sign In</a></p>
       </form>
