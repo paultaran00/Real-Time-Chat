@@ -118,13 +118,13 @@ function loginacc() {
                 atentionare("User does not exist");
             } else if (res == "pass_incorrect") {
                 atentionare("Incorrect password");
-            } 
-            else if (res == "pass_correct"){
-                window.location.replace("../html/chat.html");
+            }else{
+                location.reload();
             }
+            
         }
     });
-
+    
 }
 //LOGIN END
 

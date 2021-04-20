@@ -130,9 +130,8 @@ app.post("/login", function(request,response){
                 var a = result[0];
                 if(pass == a.password){
                     request.session.username=user;
-                    response.send("pass_correct");
+                    response.redirect("/chat")
                     
-                    // return response.redirect("/chat")
                 }
                 else{
                     response.send("pass_incorrect");
@@ -161,7 +160,8 @@ app.get('/chat', function(req, res){
 
 
 app.get('/logout', function(req, res){
-    req.session.username.destroy();
+    req.session.destroy();
+    res.redirect("/");
 });
 
 

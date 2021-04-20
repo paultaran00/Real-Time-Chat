@@ -235,9 +235,9 @@ $(document).ready(function() {
     $('.logout').click(function(){
         $.ajax({
             url: "/logout",
-            type: "POST",
+            type: "GET",
             dataType: 'text'
         });
-        window.location.replace("../html/login.html");
+        location.reload();
     });
 });
