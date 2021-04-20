@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap);
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 html,
@@ -570,10 +569,7 @@ body {
     align-items: center;
     left: 50%;
     transform: translateX(-50%);
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 4%;
-    padding-bottom: 4%;
+    padding: 3% 10%;
     background: #515463;
     border-radius: 25px;
     position: relative;

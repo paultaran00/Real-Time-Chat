@@ -5,7 +5,7 @@ $(document).ready(function() {
         dataType: 'text',
         success: function (res){
             console.log(res);
-            u = `<div class="username">${res}</div>`;
+            u = `<div class="username">@${res}</div>`;
             $(".myusername-container").append(u);
         }
     });
