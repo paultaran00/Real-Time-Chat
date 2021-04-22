@@ -266,9 +266,12 @@ body {
     /* text-align: center; */
     /* vertical-align: middle; */
     list-style-type: none;
-    -moz-user-select: none;
-    -khtml-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .chat-container {
@@ -301,7 +304,7 @@ body {
     float: left;
     /* display: inline-block; */
     position: relative;
-    margin-top: 15px;
+    margin-top: 2.5%;
     margin-right: 46%;
     margin-left: 2%;
     max-width: 90%;
@@ -325,7 +328,7 @@ body {
     /* display: inline-block; */
     position: relative;
     max-width: 90%;
-    margin-top: 15px;
+    margin-top: 2.5%;
     margin-left: 46%;
     margin-right: 10px;
     padding: 1%;
@@ -431,9 +434,12 @@ body {
     /* text-align: center; */
     /* vertical-align: middle; */
     cursor: pointer;
-    -moz-user-select: none;
-    -khtml-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 
@@ -463,9 +469,12 @@ body {
     /* text-align: center; */
     /* vertical-align: middle; */
     cursor: pointer;
-    -moz-user-select: none;
-    -khtml-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
 }
 
@@ -616,9 +625,12 @@ body {
     transform: translateY(-50%);
     left: 9%;
     cursor: pointer;
-    -moz-user-select: none;
-    -khtml-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     background: #515463;
     border-radius: 10px;
     padding: 15px;
@@ -638,9 +650,12 @@ body {
     transform: translateY(-50%);
     right: 9%;
     cursor: pointer;
-    -moz-user-select: none;
-    -khtml-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     background: #515463;
     border-radius: 10px;
     padding: 15px;
@@ -686,9 +701,12 @@ input[type="submit"]:hover, .submit-group:hover, .create-group:hover {
     z-index: 2;
     display: none;
     text-align: center;
-    -moz-user-select: none;
-    -khtml-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .creategroup-window {
@@ -746,9 +764,12 @@ input[type="submit"]:hover, .submit-group:hover, .create-group:hover {
     cursor: pointer;
     z-index: 2;
     text-align: center;
-    -moz-user-select: none;
-    -khtml-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .sendmsg_input {
@@ -815,4 +836,26 @@ input[type="submit"]:hover, .submit-group:hover, .create-group:hover {
     display: inline-block;
     vertical-align: middle;
     left: 2%;
+}
+
+.ul{
+    position: absolute;
+    color: white;
+    font-size: 70%;
+    font-weight: 700;
+    transform:translateY(-200%);
+    left: 2%;
+    word-spacing: 10px;
+    white-space: nowrap;
+}
+
+.ur{
+    position: absolute;
+    color: white;
+    font-size: 70%;
+    font-weight: 700;
+    transform:translateY(-200%);
+    right: 2%;
+    word-spacing: 10px;
+    white-space: nowrap;
 }

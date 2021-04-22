@@ -79,7 +79,6 @@ app.post('/reg', function(request, response){
             var dbc = db.db("chat");
             var a = 0;
             dbc.collection("accounts").find({username: user}).toArray(function (err, result){
-                console.log(result);
                 a = result.length;
                 if(a==1){
                     response.send("already_exist");
@@ -186,12 +185,18 @@ app.post("/changepass", function(request,response){
 app.post("/changepasdatabase", function(request,response){
     var user=request.body.username;
     var newpass=request.body.password;
-
-    MongoClient.connect(uri, function(err, db) {
-        var dbc = db.db("chat");
-        dbc.collection("accounts").updateOne({username: { $eq: user}},{$set: { password : newpass}});
-        db.close();
-    });
+    if(newpass.length<6){
+        response.send("tooshort");
+    }
+    else if(newpass.length >= 6){
+        MongoClient.connect(uri, function(err, db) {
+            response.send("changed");
+            var dbc = db.db("chat");
+            dbc.collection("accounts").updateOne({username: { $eq: user}},{$set: { password : newpass}});
+            db.close();
+        });
+    }
+    
 });
 //CHANGE PASSWORD END
 

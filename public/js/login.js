@@ -93,7 +93,7 @@ function checkReg() {
         
     }else{
         if ($('.register-form').is(':visible')){
-            atentionare("Fill up every container");
+            atentionare("Fill up all the fields");
         };
     };
 };
@@ -159,9 +159,15 @@ function checkChpas(){
                         dataType: 'text',
                         data: {username:user, password:newpass},
                         success: function (res){
-                            atentionare("Password succesfully changed");
-                            $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
-                            $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+                            if(res == "tooshort"){
+                                atentionare("Password don't have enough characters");
+                            } else{
+                                $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+                                $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+                                atentionare("Password succesfully changed");
+                            }
+                            
+                            
                             
                         }
                     });
@@ -173,7 +179,7 @@ function checkChpas(){
 
     }else{
         if ($('.changepass-form').is(':visible')){
-            atentionare("Fill up every container");
+            atentionare("Fill up all the fields");
         };
     };
 };

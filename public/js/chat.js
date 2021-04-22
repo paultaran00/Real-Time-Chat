@@ -1,10 +1,11 @@
+var usr;
 $(document).ready(function() { 
     $.ajax({
         url: "/getusername",
         type: "POST",
         dataType: 'text',
         success: function (res){
-            console.log(res);
+            usr = res;
             u = `<div class="username">@${res}</div>`;
             $(".myusername-container").append(u);
         }
@@ -152,7 +153,7 @@ function insert_message(){
     if( $(".sendmsg_input").val().length > 0){
         var mesaj = $(".sendmsg_input").val();
         $('.sendmsg_input').val(''); 
-        var limesaj = `<li class="left_msg"><div class="msg">${mesaj}</div></li>`;
+        var limesaj = `<li class="left_msg"><div class="ul">@${usr} 18:27</div><div class="msg">${mesaj}</div></li>`;
         $(".chat").append(limesaj);
         document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
     };
