@@ -112,7 +112,7 @@ body {
 .upper {
     position: relative;
     /* border-top: 2px solid rgba(255, 255, 255, .5); */
-    border-bottom: 2px solid rgba(255, 255, 255, .5);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.603);
     /* border-right: 2px solid rgba(255, 255, 255, .5);
     border-left: 2px solid rgba(255, 255, 255, .5); */
     height: 30%;
@@ -128,8 +128,8 @@ body {
     /* background-image: linear-gradient(to bottom, #444753, #4a6178, #3f7f9a, #229fb3, #01bfbf); */
     z-index: -1;
     /* border-radius: 30px; */
-    border-right: 2px solid rgba(255, 255, 255, .5);
-    border-left: 2px solid rgba(255, 255, 255, .5);
+    border-right: 1px solid rgba(255, 255, 255, 0.603);
+    border-left: 1px solid rgba(255, 255, 255, 0.603);
 
 }
 .left_background_pattern{
@@ -572,6 +572,26 @@ body {
     z-index: 3;
 }
 
+.fa-times{
+    position: absolute;
+    top: 50%;
+    left: 105%;
+    transform: translateY(-50%);
+    color: rgb(255, 255, 255);
+    z-index: 3;
+
+}
+
+.fa-check{
+    position: absolute;
+    top: 50%;
+    left: 105%;
+    transform: translateY(-50%);
+    color: rgb(255, 255, 255);
+    z-index: 3;
+
+}
+
 .myusername-container {
     display: inline-block;
     justify-content: center;
@@ -807,6 +827,9 @@ input[type="submit"]:hover, .submit-group:hover, .create-group:hover {
     cursor: pointer;
 }
 
+.fa-paper-plane:hover{
+    color: #01bfbf;
+}
 .username {
     
     position: relative;

@@ -1,4 +1,6 @@
 var usr;
+$(".fa-times").hide();
+$(".fa-check").hide();
 $(document).ready(function() { 
     $.ajax({
         url: "/getusername",
@@ -152,8 +154,15 @@ $(document).ready(function() {
 function insert_message(){
     if( $(".sendmsg_input").val().length > 0){
         var mesaj = $(".sendmsg_input").val();
-        $('.sendmsg_input').val(''); 
-        var limesaj = `<li class="left_msg"><div class="ul">@${usr} 18:27</div><div class="msg">${mesaj}</div></li>`;
+        $('.sendmsg_input').val('');
+        
+        if ($('.om').is(':visible')){
+            var limesaj = `<li class="left_msg"><div class="ul">18:27</div><div class="msg">${mesaj}</div></li>`;
+        }
+        if ($('.grup').is(':visible')){
+            var limesaj = `<li class="left_msg"><div class="ul">@${usr} 18:27</div><div class="msg">${mesaj}</div></li>`;
+        }
+
         $(".chat").append(limesaj);
         document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
     };
@@ -221,7 +230,7 @@ function status(person, on, newmsg){  // (%person, 1/0, 1/0)
         $(`.lom:contains("${person}") .fa-envelope`).css("color","#01bfbf1a");
     }  
 };
-
+//exemple de adaugare online si new message
 $(document).ready(function() {
     status("@szucseduard", 1, 0);
     status("@tacotaalexandru", 1, 1);
@@ -242,3 +251,48 @@ $(document).ready(function() {
         location.reload();
     });
 });
+
+
+//search input send ajax 1 second after stop typing 
+
+var typingTimer;
+var doneTypingInterval = 1000;
+$('.search').on('keyup', function() {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(doneTyping, doneTypingInterval);
+});
+
+$('.search').on('keydown', function() {
+  clearTimeout(typingTimer);
+});
+
+function doneTyping() {
+    var src_usr = $('.search').val();
+    $.ajax({
+        url: "/searchuser",
+        type: "POST",
+        dataType: 'text',
+        data: {src_usr:src_usr},
+        success: function (res){
+            if(res == "not_exists" || src_usr == usr){
+                $(".fa-times").show().delay(1000).fadeOut();
+            } else{
+                $(".fa-check").show().delay(1000).fadeOut();
+                $(".search").val("");
+
+                $('.om').remove();
+                $('.grup').remove();
+                var omdiv = `<div class="om">@${src_usr}</div>`;
+                $(".people").append(omdiv);
+                $('.people').css('padding-right','2%');
+                $('.people').css('background','#5154638c');
+                $('.people_menu').hide();
+                $('.people').show();
+                if ($('.begin').is(':visible')){
+                    $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
+                    $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
+                };
+            }
+        }
+    });
+}

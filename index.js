@@ -220,6 +220,28 @@ app.get('/logout', function(req, res){
 });
 
 
+//search user
+app.post("/searchuser", function(request,response){ 
+    var user = request.body.src_usr;
+    
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("accounts").find({username: { $eq: user}}).toArray(function (err, result){
+            len = result.length;
+            if(len == 0){
+                response.send("not_exists");
+            }
+            else{
+                response.send("exists");
+            }
+
+        });
+
+        db.close();
+    });
+
+});
+
 // app.get('/reg', function(request, response){
     
 //     var user=request.query.username;

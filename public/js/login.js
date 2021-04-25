@@ -42,18 +42,25 @@ function checkReg() {
             data: {username:username, password:password, answer:answer},
             success: function (res){
                         if (res==0){
+                            $(".attention").css("color", "red");
                             atentionare("You're using forbidden characters");
                         } else if (res==1){
+                            $(".attention").css("color", "red");
                             atentionare("Username don't have enough characters");
                         } else if (res==2){
+                            $(".attention").css("color", "red");
                             atentionare("Username has too many characters");
                         } else if (res==3){
+                            $(".attention").css("color", "red");
                             atentionare("Password don't have enough characters");
                         } else if (res==4){
+                            $(".attention").css("color", "red");
                             atentionare("Username has too many characters");
                         } else if (res==5){
+                            $(".attention").css("color", "red");
                             atentionare("The answer don't have enough characters");
                         } else if (res==6){
+                            $(".attention").css("color", "red");
                             atentionare("The answer has too many characters");
                         }
                         else if(res==7){
@@ -78,10 +85,13 @@ function checkReg() {
                                         
                                             $('.register-form').animate({height: "toggle", opacity: "toggle"}, "slow");
                                             $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+                                            $(".attention").css("color", "green");
                                             atentionare("Account created");
                                         
                                     }
                                     else{
+                                        $(".attention").css("color", "red");
+                                        $(".reg_username").val("");
                                         atentionare("Username already taken");
                                     }
                 
@@ -93,6 +103,7 @@ function checkReg() {
         
     }else{
         if ($('.register-form').is(':visible')){
+            $(".attention").css("color", "red");
             atentionare("Fill up all the fields");
         };
     };
@@ -115,9 +126,13 @@ function loginacc() {
         data: {username:user, password:pass},
         success: function (res){
             if(res == "not_exist"){
+                $(".attention").css("color", "red");
                 atentionare("User does not exist");
+                $(".login_username").val("");
             } else if (res == "pass_incorrect") {
+                $(".attention").css("color", "red");
                 atentionare("Incorrect password");
+                $(".login_password").val("");
             }else{
                 location.reload();
             }
@@ -148,10 +163,16 @@ function checkChpas(){
             success: function (res){
                 if(res == "not_exist"){
                     atentionare("User does not exist");
+                    $(".attention").css("color", "red");
+                    $(".Cpass_username").val("");
                 } else if (res == "question_incorrect") {
+                    $(".attention").css("color", "red");
                     atentionare("Incorrect question");
+                    $(".Cpass_question").val("");
                 } else if (res == "answer_incorrect") {
+                    $(".attention").css("color", "red");
                     atentionare("Incorrect answer");
+                    $(".Cpass_answer").val("");
                 }else if (res == "succes") {
                     $.ajax({
                         url: "/changepasdatabase",
@@ -160,10 +181,12 @@ function checkChpas(){
                         data: {username:user, password:newpass},
                         success: function (res){
                             if(res == "tooshort"){
+                                $(".attention").css("color", "red");
                                 atentionare("Password don't have enough characters");
                             } else{
                                 $('.changepass-form').animate({height: "toggle", opacity: "toggle"}, "slow");
                                 $('.login-form').animate({height: "toggle", opacity: "toggle"}, "slow");
+                                $(".attention").css("color", "green");
                                 atentionare("Password succesfully changed");
                             }
                             
@@ -179,6 +202,7 @@ function checkChpas(){
 
     }else{
         if ($('.changepass-form').is(':visible')){
+            $(".attention").css("color", "red");
             atentionare("Fill up all the fields");
         };
     };
