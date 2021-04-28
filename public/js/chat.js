@@ -113,7 +113,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $('.lom').click(function(){
-        var username = $(this).contents()[0].nodeValue.trim();
+        var username = $(this).find('.name').text();
         $('.om').remove();
         $('.grup').remove();
         var omdiv = `<div class="om">${username}</div>`;
@@ -154,17 +154,35 @@ $(document).ready(function() {
 function insert_message(){
     if( $(".sendmsg_input").val().length > 0){
         var mesaj = $(".sendmsg_input").val();
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
         $('.sendmsg_input').val('');
-        
+        var este = 1;
         if ($('.om').is(':visible')){
-            var limesaj = `<li class="left_msg"><div class="ul">18:27</div><div class="msg">${mesaj}</div></li>`;
+            var limesaj = `<li class="left_msg"><div class="ul">${time}</div><div class="msg">${mesaj}</div></li>`;
+            
+            var lnx = $('.chat-list .lom .name');
+            var este = 0;
+            for (let i = 0; i < lnx.length; i++) {
+                var txt = lnx[i].textContent;
+                if(txt == $(".om").text()){
+                    este = 1;
+                }
+            }
+
         }
         if ($('.grup').is(':visible')){
-            var limesaj = `<li class="left_msg"><div class="ul">@${usr} 18:27</div><div class="msg">${mesaj}</div></li>`;
+            var limesaj = `<li class="left_msg"><div class="ul">@${usr} ${time}</div><div class="msg">${mesaj}</div></li>`;
+        }
+        if(este == 0){    //il adauga in lista de frecventi daca nu este
+            var a = `<li class="lom"><span class="name">${$(".om").text()}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`
+            $(".chat-list").prepend(a);
         }
 
         $(".chat").append(limesaj);
         document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
+
+        
     };
 }
 

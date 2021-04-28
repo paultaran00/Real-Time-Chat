@@ -27,7 +27,7 @@ app.use(session({
 app.get('/', function(request, response){
     if (request.session.username!=undefined)
 		return response.redirect("/chat")
-    response.sendFile(__dirname + '/public/html/login.html');
+    response.sendFile(__dirname + '/public/html/chat.html');
 });
 
 //verify characters
@@ -70,7 +70,7 @@ app.post('/regverify', function(request, response){
     }
 });
 
-
+var ok = 0;
 app.post('/reg', function(request, response){
     
     var user = request.body.username;
@@ -84,6 +84,7 @@ app.post('/reg', function(request, response){
                     response.send("already_exist");
                 }
                 else{
+                    ok = 1;
                     response.send("succes");
                 }
             });
@@ -94,21 +95,25 @@ app.post('/reg', function(request, response){
 
 
 app.post('/regadd', function(request, response){
-    var add = request.body.add;
-    var user = request.body.username;
-    var pass = request.body.password;
-    var quest = request.body.question;
-    var ans = request.body.answer;
-    if (add==1){
-        MongoClient.connect(uri, function(err, db) {
-            obj={username: user, password: pass, question: quest, answer: ans};
-            var dbc = db.db("chat");
-            dbc.collection("accounts").insertOne(obj);
+    if(ok == 1){
+        var add = request.body.add;
+        var user = request.body.username;
+        var pass = request.body.password;
+        var quest = request.body.question;
+        var ans = request.body.answer;
+        if (add==1){
+            MongoClient.connect(uri, function(err, db) {
+                obj={username: user, password: pass, question: quest, answer: ans};
+                var dbc = db.db("chat");
+                dbc.collection("accounts").insertOne(obj);
 
-            db.close();
-        });
+                db.close();
+            });
+        }
+        response.send("am primit");
+        ok = 0;
     }
-    response.send("am primit");
+    
 });
 //REGISTER END
 
