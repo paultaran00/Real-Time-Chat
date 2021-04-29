@@ -27,7 +27,7 @@ app.use(session({
 app.get('/', function(request, response){
     if (request.session.username!=undefined)
 		return response.redirect("/chat")
-    response.sendFile(__dirname + '/public/html/chat.html');
+    response.sendFile(__dirname + '/public/html/login.html');
 });
 
 //verify characters
@@ -103,7 +103,7 @@ app.post('/regadd', function(request, response){
         var ans = request.body.answer;
         if (add==1){
             MongoClient.connect(uri, function(err, db) {
-                obj={username: user, password: pass, question: quest, answer: ans};
+                obj={username: user, password: pass, question: quest, answer: ans, friends:[], groups:[]};
                 var dbc = db.db("chat");
                 dbc.collection("accounts").insertOne(obj);
 
@@ -243,6 +243,36 @@ app.post("/searchuser", function(request,response){
         });
 
         db.close();
+    });
+
+});
+
+// add new user to friends list
+app.post("/addusertofriends", function(request,response){
+    var user = request.body.user;
+    var new_om = request.body.new_om;
+    
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("accounts").updateOne(
+        {username: { $eq: user}},
+            {
+              $push: {
+                friends:new_om
+              }
+            }
+        )
+
+        dbc.collection("accounts").updateOne(
+            {username: { $eq: new_om}},
+                {
+                  $push: {
+                    friends:user
+                  }
+                }
+            )
+        db.close();
+
     });
 
 });

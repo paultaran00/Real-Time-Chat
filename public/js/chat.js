@@ -161,7 +161,7 @@ function insert_message(){
         if ($('.om').is(':visible')){
             var limesaj = `<li class="left_msg"><div class="ul">${time}</div><div class="msg">${mesaj}</div></li>`;
             
-            var lnx = $('.chat-list .lom .name');
+            var lnx = $('.chat-list .lom .name');  //verifica daca userul este in lista de frecventi
             var este = 0;
             for (let i = 0; i < lnx.length; i++) {
                 var txt = lnx[i].textContent;
@@ -175,8 +175,20 @@ function insert_message(){
             var limesaj = `<li class="left_msg"><div class="ul">@${usr} ${time}</div><div class="msg">${mesaj}</div></li>`;
         }
         if(este == 0){    //il adauga in lista de frecventi daca nu este
-            var a = `<li class="lom"><span class="name">${$(".om").text()}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`
+            var om = $(".om").text();
+            var a = `<li class="lom"><span class="name">${om}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`
             $(".chat-list").prepend(a);
+
+            $.ajax({
+                url: "/addusertofriends",
+                type: "POST",
+                dataType: 'text',
+                data: {new_om:om.slice(1), user:usr},
+                success: function (res){
+                    console.log(res);
+                }
+            });
+
         }
 
         $(".chat").append(limesaj);
