@@ -1,21 +1,33 @@
-var usr;
+
 $(".fa-times").hide();
 $(".fa-check").hide();
-$(document).ready(function() { 
+
+function get_username(){
+    var usr = "";
     $.ajax({
         url: "/getusername",
         type: "POST",
+        'async':false,
         dataType: 'text',
         success: function (res){
             usr = res;
-            u = `<div class="username">@${res}</div>`;
-            $(".myusername-container").append(u);
+            
         }
     });
+    return usr;
+    
+}
+$(".myusername-container").append(`<div class="username">@${get_username()}</div>`);
+
+//conect to server socket
+var socket = io.connect("http://localhost:80");
+socket.emit("set_online", get_username());
+
+
+	
 
 
     
-});
 // functie care deschide window-ul create group la apasarea butonului
 $(document).ready(function() {     
     $('.create-group').click(function(){
@@ -172,7 +184,7 @@ function insert_message(){
 
         }
         if ($('.grup').is(':visible')){
-            var limesaj = `<li class="left_msg"><div class="ul">@${usr} ${time}</div><div class="msg">${mesaj}</div></li>`;
+            var limesaj = `<li class="left_msg"><div class="ul">@${get_username()} ${time}</div><div class="msg">${mesaj}</div></li>`;
         }
         if(este == 0){    //il adauga in lista de frecventi daca nu este
             var om = $(".om").text();
@@ -183,7 +195,7 @@ function insert_message(){
                 url: "/addusertofriends",
                 type: "POST",
                 dataType: 'text',
-                data: {new_om:om.slice(1), user:usr},
+                data: {new_om:om.slice(1), user:get_username()},
                 success: function (res){
                     console.log(res);
                 }
@@ -304,7 +316,7 @@ function doneTyping() {
         dataType: 'text',
         data: {src_usr:src_usr},
         success: function (res){
-            if(res == "not_exists" || src_usr == usr){
+            if(res == "not_exists" || src_usr == get_username()){
                 $(".fa-times").show().delay(1000).fadeOut();
             } else{
                 $(".fa-check").show().delay(1000).fadeOut();

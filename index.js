@@ -3,7 +3,7 @@ const app = express();
 var session = require('express-session');
 const http = require('http').createServer(app);
 const url = require('url');
-var io = require('socket.io');
+var io = require('socket.io')(http);
 const mongo = require("mongodb");
 
 
@@ -23,6 +23,16 @@ app.use(session({
 	cookie: { maxAge: 3600000 },
 	saveUninitialized: true
 }));
+
+app.get("/socket.io",(req, res)=>{
+	res.sendFile(__dirname + "/node_modules/socket.io/client-dist/socket.io.js");
+});
+
+
+
+
+
+
 
 app.get('/', function(request, response){
     if (request.session.username!=undefined)
@@ -272,19 +282,57 @@ app.post("/addusertofriends", function(request,response){
                 }
             )
         db.close();
-
+        io.on('connection', function(socket){
+            socket.emit("add_friend", user);
+            console.log("sa trimis");
+        });
     });
 
 });
 
-// app.get('/reg', function(request, response){
-    
-//     var user=request.query.username;
 
+
+//conect to socket 
+users={};
+
+io.on('connection', function(socket){
+
+	socket.on('set_online',(name)=>{//se user online
+        console.log("user connected");
+        users[socket.id] = name;
+        console.log(users);
+	});
+    
+    socket.on('disconnect',()=>{//se user offline
+        console.log("user disconnected");
+		delete users[socket.id];
+        console.log(users);
+	});
+
+	// socket.on('message', function(data){//when receive message on socket
+	// 	var message={"from": data.from, "to": data.to, "msg": data.msg, "date": new Date(Date.now())};
+	// 	//insert message to db
+	// 	MongoClient.connect(uri, function(err, db) {
+	// 		var dbc = db.db("messenger");
+	// 		dbc.collection("messages").insertOne(message, function(err, ress) {
+	// 			db.close();
+	// 		});
+	// 	});//end inreg
+	// });
+});
+
+
+
+
+
+
+
+
+// app.get('/reg', function(request, response){
+//     var user=request.query.username;
 //     console.log(user);
 //     response.send("am primit");
 // });
-
 
 http.listen(80, () => {
 	console.log('listening on *:80');
