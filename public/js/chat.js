@@ -36,6 +36,16 @@ function populate_friends(){
 }
 populate_friends();
 
+function online_status(){
+    var obj = [];
+    var lnx = $('.chat-list .lom .name');
+    for (let i = 0; i < lnx.length; i++) {
+        obj.push({[lnx[i].textContent.slice(1)]:0});
+    } 
+    socket.emit("onoff", [get_username(), obj]);
+    setTimeout(online_status, 5000);
+}
+setTimeout(online_status, 500);
 
 //conect to server socket
 var socket = io.connect("http://localhost:80");
@@ -149,6 +159,9 @@ $(document).ready(function() {
             $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
             $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
         };
+        if($(this).find('.fa-envelope').css("color") == "rgb(1, 191, 191)"){
+            $(this).find('.fa-envelope').css("color","#01bfbf1a");
+        }
     });
 });
 
@@ -258,30 +271,45 @@ $(document).ready(function() {
 
 
 //functie schimbare status online offline new msg
-
-function status(person, on, newmsg){  // (%person, 1/0, 1/0)
+function status_onoff(person, on){   // (%person, 1/0)
     if(on==1){
-        $(`.lom:contains("${person}") .on-off`).text('online');
-        $(`.lom:contains("${person}") .fa-circle`).css("color","#43A047");
+        for (var i=0;i<$(".lom").length;i++){
+            if($($(".lom")[i]).find(".name").text().slice(1) == person){
+                $($(".lom")[i]).find(".on-off").text('online');
+                $($(".lom")[i]).find(".fa-circle").css("color","#43A047");
+            }
+        } 
     }
     else{
-        $(`.lom:contains("${person}") .on-off`).text('offline');
-        $(`.lom:contains("${person}") .fa-circle`).css("color","#8d8d8d");
+        for (var i=0;i<$(".lom").length;i++){
+            if($($(".lom")[i]).find(".name").text().slice(1) == person){
+                $($(".lom")[i]).find(".on-off").text('offline');
+                $($(".lom")[i]).find(".fa-circle").css("color","#8d8d8d");
+            }
+        }
     }
+
+}
+function status_newmsg(person, newmsg){  // (%person, 1/0)
+
     if(newmsg==1){
-        $(`.lom:contains("${person}") .fa-envelope`).css("color","#01bfbf");
+        for (var i=0;i<$(".lom").length;i++){
+            if($($(".lom")[i]).find(".name").text().slice(1) == person){
+                $($(".lom")[i]).find(".fa-envelope").css("color","#01bfbf");
+                
+            }
+        } 
     }
     else{
-        $(`.lom:contains("${person}") .fa-envelope`).css("color","#01bfbf1a");
-    }  
+        for (var i=0;i<$(".lom").length;i++){
+            if($($(".lom")[i]).find(".name").text().slice(1) == person){
+                $($(".lom")[i]).find(".fa-envelope").css("color","#01bfbf1a");
+                
+            }
+        }
+    }
 };
 //exemple de adaugare online si new message
-$(document).ready(function() {
-    status("@szucseduard", 1, 0);
-    status("@tacotaalexandru", 1, 1);
-    status("@ionutd", 0, 1);
-    status("@alexandrabaciu", 1, 0);
-});
 
 
 //logout
@@ -293,7 +321,11 @@ $(document).ready(function() {
             type: "GET",
             dataType: 'text'
         });
-        location.reload();
+        
+        setTimeout(
+            function() {
+                location.reload();
+            }, 500);
     });
 });
 
@@ -349,4 +381,23 @@ function doneTyping() {
 socket.on('add_friend_to_list',(data)=>{
     var new_friend = `<li class="lom"><span class="name">@${data}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`;
     $(".chat-list").prepend(new_friend);
+    status_newmsg(data,1);
+    status_onoff(data,1);
+});
+
+//listen for onoff
+
+socket.on('onoff_client',(data)=>{//status online offline users
+    for (i in data){
+        
+        for (var j in data[i]){
+            status_onoff(j,data[i][j]);
+            // console.log(j +" " +data[i][j]);
+        }
+    }
+});
+
+//listen for message
+socket.on('message', (data)=>{
+
 });

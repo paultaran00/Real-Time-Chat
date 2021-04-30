@@ -274,21 +274,32 @@ app.post("/populate_friends", function(request,response){
 });
 
 
+// app.post("/online_status", function(request,response){
+//     var arr = request.body.arr;
+//     console.log(user);
+    
+
+// });
+
 
 //socket 
 users={};
-
+var users_list = [];
 io.on('connection', function(socket){
 
 	socket.on('set_online',(name)=>{//se user online
         console.log("user connected");
         users[socket.id] = name;
+        if (users_list.indexOf(name) === -1)
+            users_list.push(name)
         console.log(users);
 	});
     
     socket.on('disconnect',()=>{//se user offline
         console.log("user disconnected");
+        users_list = users_list.filter(e => e !== users[socket.id] );
 		delete users[socket.id];
+        
         console.log(users);
 	});
 
@@ -322,6 +333,42 @@ io.on('connection', function(socket){
             }
         }
 
+	});
+
+
+    socket.on('onoff',(data)=>{//status online offline users
+        
+        // console.log(users_list);
+        obj = data[1];
+        // console.log(data[1][0].key());
+        var from;
+        for (var i in users){
+            if (users[i] == data[0]){
+                from = i;
+            }
+        }
+
+        for (var i in obj){
+            // console.log(sdata[1]);
+            var key = Object.keys(obj[i])[0];
+            
+            if(users_list.includes(key)){
+                // console.log("am intrat in if");
+                for (var k in obj[i]){
+                    obj[i][k] = 1;
+                }
+            }else{
+                // console.log("am intrat pe else");
+                for (var k in obj[i]){
+                    obj[i][k] = 0;
+                }
+            }
+            
+        }
+        // console.log(obj);
+        // console.log(users);
+        
+        io.to(from).emit('onoff_client', obj);
 	});
 
 	// socket.on('message', function(data){//when receive message on socket
