@@ -135,7 +135,7 @@ $(document).ready(function() {
 //add name to chat when you click on li
 
 $(document).ready(function() {
-    $('.lom').click(function(){
+    $('.lom').on( "click", function() {
         var username = $(this).find('.name').text();
         $('.om').remove();
         $('.grup').remove();
