@@ -19,9 +19,14 @@ function get_username(){
 }
 $(".myusername-container").append(`<div class="username">@${get_username()}</div>`);
 
+
+
+
+
 //conect to server socket
 var socket = io.connect("http://localhost:80");
 socket.emit("set_online", get_username());
+
 
 
 	
@@ -102,15 +107,7 @@ function add_group_to_list(){
         
         $(".group-list").prepend(gdiv);
 
-        // $.ajax({
-        //     url: "/addgroup",
-        //     type: "GET",
-        //     dataType: 'text',
-        //     data: {group_name:gname, users_names:users},
-        //     success: function (res){
-        //         console.log(res);
-        //     }
-        // });
+        
     };
 
 };
@@ -191,15 +188,7 @@ function insert_message(){
             var a = `<li class="lom"><span class="name">${om}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`
             $(".chat-list").prepend(a);
 
-            $.ajax({
-                url: "/addusertofriends",
-                type: "POST",
-                dataType: 'text',
-                data: {new_om:om.slice(1), user:get_username()},
-                success: function (res){
-                    console.log(res);
-                }
-            });
+            socket.emit("add_friends_list", [om.slice(1), get_username()]);
 
         }
 
@@ -338,3 +327,12 @@ function doneTyping() {
         }
     });
 }
+
+
+
+//listen for add to friends list
+
+socket.on('add_friend_to_list',(data)=>{
+    var new_friend = `<li class="lom"><span class="name">@${data}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`;
+    $(".chat-list").prepend(new_friend);
+});

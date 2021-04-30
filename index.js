@@ -282,17 +282,13 @@ app.post("/addusertofriends", function(request,response){
                 }
             )
         db.close();
-        io.on('connection', function(socket){
-            socket.emit("add_friend", user);
-            console.log("sa trimis");
-        });
     });
 
 });
 
 
 
-//conect to socket 
+//socket 
 users={};
 
 io.on('connection', function(socket){
@@ -307,6 +303,38 @@ io.on('connection', function(socket){
         console.log("user disconnected");
 		delete users[socket.id];
         console.log(users);
+	});
+
+    socket.on('add_friends_list',(data)=>{//se adauga la prieteni pe client daca e online cel care primeste
+        
+        MongoClient.connect(uri, function(err, db) {
+            var dbc = db.db("chat");
+            dbc.collection("accounts").updateOne(
+            {username: { $eq: data[0]}},
+                {
+                $push: {
+                    friends:data[1]
+                }
+                }
+            )
+
+            dbc.collection("accounts").updateOne(
+                {username: { $eq: data[1]}},
+                    {
+                    $push: {
+                        friends:data[0]
+                    }
+                    }
+                )
+            db.close();
+        });
+
+        for (var i in users){// daca userul care trebe sa primeasca mesajul e online, se adauga la friend list
+            if (users[i] == data[0]){
+                io.to(i).emit('add_friend_to_list', data[1]);
+            }
+        }
+
 	});
 
 	// socket.on('message', function(data){//when receive message on socket
