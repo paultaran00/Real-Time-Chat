@@ -19,8 +19,22 @@ function get_username(){
 }
 $(".myusername-container").append(`<div class="username">@${get_username()}</div>`);
 
-
-
+function populate_friends(){
+    $.ajax({
+        url: "/populate_friends",
+        type: "POST",
+        dataType: 'text',
+        data: {user:get_username()},
+        success: function (res){
+            res = JSON.parse(res);
+            for (var i = 0; i < res.length; i++){
+                var friend = `<li class="lom"><span class="name">@${res[i]}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`;
+                $(".chat-list").prepend(friend);
+            }
+        }
+    });
+}
+populate_friends();
 
 
 //conect to server socket

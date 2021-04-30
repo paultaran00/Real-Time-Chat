@@ -257,30 +257,17 @@ app.post("/searchuser", function(request,response){
 
 });
 
-// add new user to friends list
-app.post("/addusertofriends", function(request,response){
+// populate friend list
+app.post("/populate_friends", function(request,response){
     var user = request.body.user;
-    var new_om = request.body.new_om;
     
     MongoClient.connect(uri, function(err, db) {
         var dbc = db.db("chat");
-        dbc.collection("accounts").updateOne(
-        {username: { $eq: user}},
-            {
-              $push: {
-                friends:new_om
-              }
-            }
-        )
+        dbc.collection("accounts").find({username: { $eq: user}}).toArray(function (err, result){
+            response.send(result[0].friends);
+            
+        });
 
-        dbc.collection("accounts").updateOne(
-            {username: { $eq: new_om}},
-                {
-                  $push: {
-                    friends:user
-                  }
-                }
-            )
         db.close();
     });
 
@@ -305,7 +292,7 @@ io.on('connection', function(socket){
         console.log(users);
 	});
 
-    socket.on('add_friends_list',(data)=>{//se adauga la prieteni pe client daca e online cel care primeste
+    socket.on('add_friends_list',(data)=>{//add new friend
         
         MongoClient.connect(uri, function(err, db) {
             var dbc = db.db("chat");
@@ -330,7 +317,7 @@ io.on('connection', function(socket){
         });
 
         for (var i in users){// daca userul care trebe sa primeasca mesajul e online, se adauga la friend list
-            if (users[i] == data[0]){
+            if (users[i] == data[0]){ //verifica daca userul exista in lista de useri online
                 io.to(i).emit('add_friend_to_list', data[1]);
             }
         }
