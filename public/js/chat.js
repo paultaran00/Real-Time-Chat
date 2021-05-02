@@ -140,7 +140,9 @@ $(document).ready(function() {
 });
 
 
-
+function scrolltobottom(){
+    document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
+}
 
 //add name to chat when you click on li
 
@@ -159,9 +161,17 @@ $(document).ready(function() {
             $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
             $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
         };
+
+
         if($(this).find('.fa-envelope').css("color") == "rgb(1, 191, 191)"){
             $(this).find('.fa-envelope').css("color","#01bfbf1a");
+
+            //need to do update in database user_seen
         }
+        $('.chat').empty();
+        socket.emit("update_chat", {from: get_username(), to: username.slice(1)});
+        setTimeout(scrolltobottom, 100);
+
     });
 });
 
@@ -182,6 +192,7 @@ $(document).ready(function() {
             $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
             $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
         };
+        // setTimeout(scrolltobottom, 500);
     });
     
 });
@@ -235,7 +246,7 @@ function insert_message(){
             $(".chat").append(first_limesaj);
         }else{
 
-            socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 1, user2_seen: 0, mesg: {author: get_username(), date: t, m: mesaj}})
+            socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 1, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
             $(".chat").append(limesaj);
         }
 
@@ -408,6 +419,8 @@ function doneTyping() {
 
 
 
+
+
 //listen for add to friends list
 
 socket.on('add_friend_to_list',(data)=>{
@@ -429,7 +442,44 @@ socket.on('onoff_client',(data)=>{//status online offline users
     }
 });
 
-//listen for message
-socket.on('message_client', (data)=>{
+//populate chat messages when open a chat with a user
+socket.on('populate_msgs', (data)=>{
+    // console.log(data);
+    
+    for (var i in data){
+        if(typeof data[i-1] === 'undefined') {
+            if (data[i].author == get_username()){
+                var p = `<li class="left_msg"><div class="ul">${fulltime(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                $('.chat').append(p);
+                // if($('.ul').text().length > 6){
+                //     $('.people').css('left','1000%');
+                // }
+            }else{
+                var p = `<li class="right_msg"><div class="ul">${fulltime(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                $('.chat').append(p);
+                // if($('.ul').text().length > 6){
+                //     $('.people').css('left','1000%');
+                // }
+            }
+        }
+        else {
+            if (data[i-1].date.substr(0, data[i-1].date.indexOf(' ')) == data[i].date.substr(0, data[i-1].date.indexOf(' '))){
+                if (data[i].author == get_username()){
+                    var p = `<li class="left_msg"><div class="ul">${time(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }else{
+                    var p = `<li class="right_msg"><div class="ul">${time(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }
+            }
 
+        }
+        
+    }
+    scrolltobottom();
+});
+
+//listen for message real time
+socket.on('message_client', (data)=>{
+    
 });

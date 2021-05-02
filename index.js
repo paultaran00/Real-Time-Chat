@@ -376,14 +376,14 @@ io.on('connection', function(socket){
 			var dbc = db.db("chat");
 			dbc.collection("chat_messages").insertOne(message_obj)
             dbc.collection("chat_messages").updateOne({user1: data.from, user2: data.to}, {$push : { msgs: data.mesg }});
-            console.log(data.mesg);
+            // console.log(data.mesg);
 
             db.close();
 		});
 	});
 
 	socket.on('message_chat', function(data){ //when receive message on socket
-        console.log(data.mesg);
+        // console.log(data.mesg);
 		
 		//insert message to db
 		MongoClient.connect(uri, function(err, db) {
@@ -394,7 +394,45 @@ io.on('connection', function(socket){
             db.close();
 		});
 	});
+
+    socket.on('update_chat', function(data){ //when receive message on socket
+        var from;
+        for (var i in users){
+            if (users[i] == data.from){
+                from = i;
+            }
+        }
+        // console.log(from);
+        // console.log(data);
+		
+        const list = new Promise(function (resolve, reject) {
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                dbc.collection("chat_messages").find({$or: [ {user1: data.from, user2: data.to}, {user1: data.to, user2: data.from} ]}).toArray(function (err, result){
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(result);         
+                   }
+                });
+                
+            
+            
+            
+            db.close();
+               
+            });
+        });
+
+          list.then(arrayList => {
+            // console.log(arrayList[0].msgs);
+            io.to(from).emit("populate_msgs", arrayList[0].msgs);
+          }).catch(err => console.log(err.message));
+
+        
+	});
 });
+
 
 const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 function fulltime(d){
@@ -410,11 +448,9 @@ function time(d){
     return pad(d.getUTCHours()+3)+':'
     + pad(d.getUTCMinutes())
 }
-
-// var d = new Date();
-console.log(fulltime(new Date()));
-
-
+var haha= fulltime(new Date());
+console.log(haha);
+console.log(haha.substr(0, haha.indexOf(' ')));
 
 
 http.listen(80, () => {
