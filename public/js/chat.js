@@ -186,19 +186,35 @@ $(document).ready(function() {
     
 });
 
+const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+function fulltime(d){
+    function pad(n){return n<10 ? '0'+n : n}
+    return d.getUTCFullYear()+'-'
+    + pad(months[d.getMonth()])+'-'
+    + pad(d.getUTCDate())+' '
+    + pad(d.getUTCHours()+3)+':'
+    + pad(d.getUTCMinutes())
+}
+function time(d){
+    function pad(n){return n<10 ? '0'+n : n}
+    return pad(d.getUTCHours()+3)+':'
+    + pad(d.getUTCMinutes())
+}
+
 //functie insert mesage
 function insert_message(){
     if( $(".sendmsg_input").val().length > 0){
+        var to_person = $(".om").text().slice(1);
+        console.log(to_person);
         var mesaj = $(".sendmsg_input").val();
-        var dt = new Date();
-        var time = dt.getHours() + ":" + dt.getMinutes();
+        var fullt = fulltime(new Date());
+        var t = time(new Date());
         $('.sendmsg_input').val('');
-        var este = 1;
+        var este = 0;
         if ($('.om').is(':visible')){
-            var limesaj = `<li class="left_msg"><div class="ul">${time}</div><div class="msg">${mesaj}</div></li>`;
+            var limesaj = `<li class="left_msg"><div class="ul">${t}</div><div class="msg">${mesaj}</div></li>`;
             
             var lnx = $('.chat-list .lom .name');  //verifica daca userul este in lista de frecventi
-            var este = 0;
             for (let i = 0; i < lnx.length; i++) {
                 var txt = lnx[i].textContent;
                 if(txt == $(".om").text()){
@@ -207,19 +223,35 @@ function insert_message(){
             }
 
         }
-        if ($('.grup').is(':visible')){
-            var limesaj = `<li class="left_msg"><div class="ul">@${get_username()} ${time}</div><div class="msg">${mesaj}</div></li>`;
-        }
+
         if(este == 0){    //il adauga in lista de frecventi daca nu este
             var om = $(".om").text();
             var a = `<li class="lom"><span class="name">${om}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`
             $(".chat-list").prepend(a);
 
             socket.emit("add_friends_list", [om.slice(1), get_username()]);
+            socket.emit("message_chat_first", {from: get_username(), to: to_person, user1_seen: 1, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
+            var first_limesaj = `<li class="left_msg"><div class="ul">${fullt}</div><div class="msg">${mesaj}</div></li>`;
+            $(".chat").append(first_limesaj);
+        }else{
 
+            socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 1, user2_seen: 0, mesg: {author: get_username(), date: t, m: mesaj}})
+            $(".chat").append(limesaj);
         }
 
-        $(".chat").append(limesaj);
+        
+
+
+
+
+
+
+
+        if ($('.grup').is(':visible')){
+            var limesaj = `<li class="left_msg"><div class="ul">@${get_username()} ${time}</div><div class="msg">${mesaj}</div></li>`;
+        }
+
+        
         document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
 
         
@@ -398,6 +430,6 @@ socket.on('onoff_client',(data)=>{//status online offline users
 });
 
 //listen for message
-socket.on('message', (data)=>{
+socket.on('message_client', (data)=>{
 
 });

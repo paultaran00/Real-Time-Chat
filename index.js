@@ -370,31 +370,52 @@ io.on('connection', function(socket){
         
         io.to(from).emit('onoff_client', obj);
 	});
+    socket.on('message_chat_first', function(data){ //when receive first message on socket
+        var message_obj = {user1: data.from, user2: data.to, user1_seen: data.user1_seen, user2_seen: data.user2_seen, msgs: []}
+		MongoClient.connect(uri, function(err, db) {
+			var dbc = db.db("chat");
+			dbc.collection("chat_messages").insertOne(message_obj)
+            dbc.collection("chat_messages").updateOne({user1: data.from, user2: data.to}, {$push : { msgs: data.mesg }});
+            console.log(data.mesg);
 
-	// socket.on('message', function(data){//when receive message on socket
-	// 	var message={"from": data.from, "to": data.to, "msg": data.msg, "date": new Date(Date.now())};
-	// 	//insert message to db
-	// 	MongoClient.connect(uri, function(err, db) {
-	// 		var dbc = db.db("messenger");
-	// 		dbc.collection("messages").insertOne(message, function(err, ress) {
-	// 			db.close();
-	// 		});
-	// 	});//end inreg
-	// });
+            db.close();
+		});
+	});
+
+	socket.on('message_chat', function(data){ //when receive message on socket
+        console.log(data.mesg);
+		
+		//insert message to db
+		MongoClient.connect(uri, function(err, db) {
+			var dbc = db.db("chat");
+			dbc.collection("chat_messages").updateOne({user1: data.from, user2: data.to}, {$push : { msgs: data.mesg }});
+            dbc.collection("chat_messages").updateOne({user1: data.to, user2: data.from}, {$push : { msgs: data.mesg }});
+
+            db.close();
+		});
+	});
 });
 
+const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+function fulltime(d){
+    function pad(n){return n<10 ? '0'+n : n}
+    return d.getUTCFullYear()+'-'
+    + pad(months[d.getMonth()])+'-'
+    + pad(d.getUTCDate())+' '
+    + pad(d.getUTCHours()+3)+':'
+    + pad(d.getUTCMinutes())
+}
+function time(d){
+    function pad(n){return n<10 ? '0'+n : n}
+    return pad(d.getUTCHours()+3)+':'
+    + pad(d.getUTCMinutes())
+}
+
+// var d = new Date();
+console.log(fulltime(new Date()));
 
 
 
-
-
-
-
-// app.get('/reg', function(request, response){
-//     var user=request.query.username;
-//     console.log(user);
-//     response.send("am primit");
-// });
 
 http.listen(80, () => {
 	console.log('listening on *:80');
