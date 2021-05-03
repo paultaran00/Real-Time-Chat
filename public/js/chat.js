@@ -141,7 +141,7 @@ $(document).ready(function() {
 
 
 function scrolltobottom(){
-    document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
+    $(".chat").scrollTop($(".chat")[0].scrollHeight);
 }
 
 //add name to chat when you click on li
@@ -170,7 +170,7 @@ $(document).ready(function() {
         }
         $('.chat').empty();
         socket.emit("update_chat", {from: get_username(), to: username.slice(1)});
-        setTimeout(scrolltobottom, 100);
+        // setTimeout(scrolltobottom, 100);
 
     });
 });
@@ -261,9 +261,8 @@ function insert_message(){
         if ($('.grup').is(':visible')){
             var limesaj = `<li class="left_msg"><div class="ul">@${get_username()} ${time}</div><div class="msg">${mesaj}</div></li>`;
         }
-
         
-        document.querySelector(".chat").scrollTo(0,document.body.scrollHeight);
+        scrolltobottom();
 
         
     };
@@ -481,5 +480,14 @@ socket.on('populate_msgs', (data)=>{
 
 //listen for message real time
 socket.on('message_client', (data)=>{
-    
+    console.log(data);
+    if ($('.people').is(':visible')){
+        if ($(".om").text().slice(1) == data.author){
+
+            var p = `<li class="right_msg"><div class="ul">${time(new Date())}</div><div class="msg">${data.m}</div></li>`
+            $('.chat').append(p);
+
+        }
+    };
+    scrolltobottom();
 });

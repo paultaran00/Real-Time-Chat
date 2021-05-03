@@ -380,6 +380,16 @@ io.on('connection', function(socket){
 
             db.close();
 		});
+
+        var to;
+        for (var i in users){
+            if (users[i] == data.to){
+                to = i;
+            }
+        }
+
+        io.to(to).emit("message_client", data.mesg);
+
 	});
 
 	socket.on('message_chat', function(data){ //when receive message on socket
@@ -393,6 +403,15 @@ io.on('connection', function(socket){
 
             db.close();
 		});
+
+        var to;
+        for (var i in users){
+            if (users[i] == data.to){
+                to = i;
+            }
+        }
+
+        io.to(to).emit("message_client", data.mesg);
 	});
 
     socket.on('update_chat', function(data){ //when receive message on socket
@@ -433,24 +452,6 @@ io.on('connection', function(socket){
 	});
 });
 
-
-const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-function fulltime(d){
-    function pad(n){return n<10 ? '0'+n : n}
-    return d.getUTCFullYear()+'-'
-    + pad(months[d.getMonth()])+'-'
-    + pad(d.getUTCDate())+' '
-    + pad(d.getUTCHours()+3)+':'
-    + pad(d.getUTCMinutes())
-}
-function time(d){
-    function pad(n){return n<10 ? '0'+n : n}
-    return pad(d.getUTCHours()+3)+':'
-    + pad(d.getUTCMinutes())
-}
-var haha= fulltime(new Date());
-console.log(haha);
-console.log(haha.substr(0, haha.indexOf(' ')));
 
 
 http.listen(80, () => {
