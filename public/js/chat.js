@@ -443,18 +443,18 @@ socket.on('onoff_client',(data)=>{//status online offline users
 
 //populate chat messages when open a chat with a user
 socket.on('populate_msgs', (data)=>{
-    // console.log(data);
+    console.log(data);
     
     for (var i in data){
         if(typeof data[i-1] === 'undefined') {
             if (data[i].author == get_username()){
-                var p = `<li class="left_msg"><div class="ul">${fulltime(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                var p = `<li class="left_msg"><div class="ul" style="left:2%;">${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
                 $('.chat').append(p);
                 // if($('.ul').text().length > 6){
                 //     $('.people').css('left','1000%');
                 // }
             }else{
-                var p = `<li class="right_msg"><div class="ul">${fulltime(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
                 $('.chat').append(p);
                 // if($('.ul').text().length > 6){
                 //     $('.people').css('left','1000%');
@@ -464,10 +464,10 @@ socket.on('populate_msgs', (data)=>{
         else {
             if (data[i-1].date.substr(0, data[i-1].date.indexOf(' ')) == data[i].date.substr(0, data[i-1].date.indexOf(' '))){
                 if (data[i].author == get_username()){
-                    var p = `<li class="left_msg"><div class="ul">${time(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                    var p = `<li class="left_msg"><div class="ul" style="left:2%;">${data[i].date.substr(data[i].date.indexOf(' ')+1)}</div><div class="msg">${data[i].m}</div></li>`
                     $('.chat').append(p);
                 }else{
-                    var p = `<li class="right_msg"><div class="ul">${time(new Date())}</div><div class="msg">${data[i].m}</div></li>`
+                    var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[i].date.substr(data[i].date.indexOf(' ')+1)}</div><div class="msg">${data[i].m}</div></li>`
                     $('.chat').append(p);
                 }
             }
@@ -484,7 +484,7 @@ socket.on('message_client', (data)=>{
     if ($('.people').is(':visible')){
         if ($(".om").text().slice(1) == data.author){
 
-            var p = `<li class="right_msg"><div class="ul">${time(new Date())}</div><div class="msg">${data.m}</div></li>`
+            var p = `<li class="right_msg"><div class="ul">${data.date.substr(data.date.indexOf(' ')+1)}</div><div class="msg">${data.m}</div></li>`
             $('.chat').append(p);
 
         }
