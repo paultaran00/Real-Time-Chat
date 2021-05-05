@@ -273,6 +273,23 @@ app.post("/populate_friends", function(request,response){
 
 });
 
+// populate group list
+app.post("/populate_groups", function(request,response){
+    var user = request.body.user;
+    
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("accounts").find({username: { $eq: user}}).toArray(function (err, result){
+            
+            response.send(result[0].groups);
+            
+        });
+
+        db.close();
+    });
+
+});
+
 function create_group_db(gname, arr, len){
     seen_list = [];
     for (var i; i<len; i++ ){

@@ -37,6 +37,24 @@ function populate_friends(){
 }
 populate_friends();
 
+function populate_groups(){
+    $.ajax({
+        url: "/populate_groups",
+        type: "POST",
+        dataType: 'text',
+        data: {user:get_username()},
+        success: function (res){
+            // console.log(res);
+            res = JSON.parse(res);
+            for (var i = 0; i < res.length; i++){
+                var group = `<li class="lgrup">${res[i]}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
+                $(".group-list").prepend(group);
+            }
+        }
+    });
+}
+populate_groups();
+
 function online_status(){
     var obj = [];
     var lnx = $('.chat-list .lom .name');
@@ -197,18 +215,13 @@ function add_group_to_list(){
                         atentionare("Group created");
                         setTimeout(hide_create_group_winrow, 3000);
 
-                        //ul group users
-                        $(".group_users").empty();
-                        for (var i in group_users_ul){
-                            var u = `<li class="group_usr">@${group_users_ul[i]}</li>`
-                            $(".group_users").append(u);
-                        }
+                        
 
                         
                     }
     
     
-                    // update users groups(joined groups)
+                    
                 }
             });
 
@@ -311,6 +324,8 @@ function insert_message(){
         var t = time(new Date());
         $('.sendmsg_input').val('');
         var este = 0;
+
+        
         if ($('.om').is(':visible')){
             var limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${t}</div><div class="msg">${mesaj}</div></li>`;
             
@@ -349,11 +364,14 @@ function insert_message(){
 
         if ($('.grup').is(':visible')){
             var limesaj = `<li class="left_msg"><div class="ul">@${get_username()} ${time}</div><div class="msg">${mesaj}</div></li>`;
+
+
+            //group chat
         }
         
-        scrolltobottom();
 
-        
+
+        scrolltobottom();
     };
 }
 
