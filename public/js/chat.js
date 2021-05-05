@@ -131,22 +131,98 @@ $(document).ready(function() {
 });
 
 
-//add group to group-list when creating group
 
+function atentionare(care) {
+    $('.attention').text(`${care}`);
+    $('.attention').animate({height: "toggle", opacity: "toggle"}, "fast");
+    setTimeout('hide()',3000);
+  
+};
+function hide(){
+    $('.attention').animate({height: "toggle", opacity: "toggle"}, "fast");
+};
+
+
+
+//add group to group-list when creating group
 function add_group_to_list(){
     var regform3 = $(".creategroup-form");
     if(regform3[0].checkValidity()) {
         var gname = $('.creategroup-name').val();
         // console.log(gname);
         var users = $('.creategroup-users').val();
-        var gdiv = `<li class="lgrup">${gname}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
-        
-        $(".group-list").prepend(gdiv);
+        var array = users.split(' ');
 
-        
+        var friends = [];
+        var lnx = $('.chat-list .lom .name');
+        for (let i = 0; i < lnx.length; i++) {
+            friends.push(lnx[i].textContent.slice(1));
+        }
+        var include = 1;
+        for (var i in array){
+            if (array.includes(get_username())){
+                include = 2;
+            }
+            if (!friends.includes(array[i])){
+                include = 0;
+            }
+        }
+        group_users_ul = [];
+        group_users_ul.push(get_username());
+        for (var i in array){
+            group_users_ul.push(array[i]);
+        }
+
+        if(include == 0){
+            atentionare("You have to be friends with all added users");
+        }else if(include == 2){
+            atentionare("You already are in the group, don't add yourself");
+        }
+        else{
+
+            $.ajax({
+                url: "/create_group",
+                type: "POST",
+                dataType: 'text',
+                data: {group_n: gname, users: users, from: get_username()},
+                success: function (res){
+                    console.log(res);
+                    if(res == "exists"){
+                        atentionare("Group name already exists");
+                    }else if(res == "created"){
+                        var gdiv = `<li class="lgrup">${gname}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
+                        $(".group-list").prepend(gdiv);
+
+                        $(".attention").css("color", "green");
+                        atentionare("Group created");
+                        setTimeout(hide_create_group_winrow, 3000);
+
+                        //ul group users
+                        $(".group_users").empty();
+                        for (var i in group_users_ul){
+                            var u = `<li class="group_usr">@${group_users_ul[i]}</li>`
+                            $(".group_users").append(u);
+                        }
+
+                        
+                    }
+    
+    
+                    // update users groups(joined groups)
+                }
+            });
+
+        }
+  
     };
 
 };
+
+function hide_create_group_winrow(){
+    $(".creategroup-window").hide();
+    $(".attention").css("color", "red");
+}
+
 $(document).ready(function() {
     add_group_to_list();
 });
@@ -412,6 +488,7 @@ function doneTyping() {
                 $(".fa-check").show().delay(1000).fadeOut();
                 $(".search").val("");
 
+                $('.chat').empty();
                 $('.om').remove();
                 $('.grup').remove();
                 var omdiv = `<div class="om">@${src_usr}</div>`;
@@ -428,6 +505,8 @@ function doneTyping() {
         }
     });
 }
+
+
 
 
 
@@ -478,6 +557,14 @@ socket.on('populate_msgs', (data)=>{
                     $('.chat').append(p);
                 }else{
                     var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[i].date.substr(data[i].date.indexOf(' ')+1)}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }
+            }else{
+                if (data[i].author == get_username()){
+                    var p = `<li class="left_msg"><div class="ul" style="left:2%;">${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }else{
+                    var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
                     $('.chat').append(p);
                 }
             }

@@ -273,6 +273,67 @@ app.post("/populate_friends", function(request,response){
 
 });
 
+function create_group_db(gname, arr, len){
+    seen_list = [];
+    for (var i; i<len; i++ ){
+        seen_list.push(0);
+    }
+    console.log(seen_list)
+    var group_obj = {group_name: gname, users: arr, users_seen: seen_list, msgs: []}
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("group_messages").insertOne(group_obj)
+        db.close();
+    });
+}
+
+//update users groups
+function update_users_groups(user, group){
+
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("accounts").updateOne(
+            {username: { $eq: user}},
+                {
+                $push: {
+                    groups: group
+                }
+                }
+        )
+
+    db.close();  
+    });
+}
+
+//create group
+app.post("/create_group", function(request,response){
+    var g_name = request.body.group_n;
+    var users = request.body.users;
+    var from = request.body.from;
+    var array = users.split(' ');
+    array.push(from);
+    
+    len = array.length;
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("group_messages").find({group_name: { $eq: g_name}}).toArray(function (err, result){
+            len = result.length;
+            if (len != 0){
+                response.send("exists");
+            }else{
+                create_group_db(g_name, array, len);
+                response.send("created");
+
+                for (i in array){
+                    update_users_groups(array[i], g_name);
+                }
+            }
+
+        });
+
+        db.close();  
+    });
+});
 
 // app.post("/online_status", function(request,response){
 //     var arr = request.body.arr;
@@ -498,6 +559,8 @@ io.on('connection', function(socket){
 
     function searchdb(from, user, key){
         if(user == '') 
+            return;
+        if(key == '') 
             return;
         var ok;
         const list = new Promise(function (resolve, reject) {
