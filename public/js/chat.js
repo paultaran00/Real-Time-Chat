@@ -1,4 +1,5 @@
 
+
 $(".fa-times").hide();
 $(".fa-check").hide();
 
@@ -47,6 +48,17 @@ function online_status(){
 }
 setTimeout(online_status, 500);
 
+function seen_status(){
+    var obj = [];
+    var lnx = $('.chat-list .lom .name');
+    for (let i = 0; i < lnx.length; i++) {
+        obj.push({[lnx[i].textContent.slice(1)]:0});
+    } 
+    socket.emit("update_seen", [get_username(), obj]);
+    setTimeout(seen_status, 5000);
+}
+
+setTimeout(seen_status, 500);
 //conect to server socket
 var socket = io.connect("http://localhost:80");
 socket.emit("set_online", get_username());
@@ -166,7 +178,8 @@ $(document).ready(function() {
         if($(this).find('.fa-envelope').css("color") == "rgb(1, 191, 191)"){
             $(this).find('.fa-envelope').css("color","#01bfbf1a");
 
-            //need to do update in database user_seen
+            
+            socket.emit("remove_seen", {from: get_username(), to: username.slice(1)});
         }
         $('.chat').empty();
         socket.emit("update_chat", {from: get_username(), to: username.slice(1)});
@@ -214,16 +227,16 @@ function time(d){
 
 //functie insert mesage
 function insert_message(){
-    if( $(".sendmsg_input").val().length > 0){
+    if( $(".sendmsg_input").val().length > 0 && $(".sendmsg_input").val() != " " && $(".sendmsg_input").val() != "  "&& $(".sendmsg_input").val() != "   "&& $(".sendmsg_input").val() != "    "&& $(".sendmsg_input").val() != "     "){
         var to_person = $(".om").text().slice(1);
-        console.log(to_person);
+        // console.log(to_person);
         var mesaj = $(".sendmsg_input").val();
         var fullt = fulltime(new Date());
         var t = time(new Date());
         $('.sendmsg_input').val('');
         var este = 0;
         if ($('.om').is(':visible')){
-            var limesaj = `<li class="left_msg"><div class="ul">${t}</div><div class="msg">${mesaj}</div></li>`;
+            var limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${t}</div><div class="msg">${mesaj}</div></li>`;
             
             var lnx = $('.chat-list .lom .name');  //verifica daca userul este in lista de frecventi
             for (let i = 0; i < lnx.length; i++) {
@@ -241,12 +254,12 @@ function insert_message(){
             $(".chat-list").prepend(a);
 
             socket.emit("add_friends_list", [om.slice(1), get_username()]);
-            socket.emit("message_chat_first", {from: get_username(), to: to_person, user1_seen: 1, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
-            var first_limesaj = `<li class="left_msg"><div class="ul">${fullt}</div><div class="msg">${mesaj}</div></li>`;
+            socket.emit("message_chat_first", {from: get_username(), to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
+            var first_limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${fullt}</div><div class="msg">${mesaj}</div></li>`;
             $(".chat").append(first_limesaj);
         }else{
 
-            socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 1, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
+            socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
             $(".chat").append(limesaj);
         }
 
@@ -441,24 +454,21 @@ socket.on('onoff_client',(data)=>{//status online offline users
     }
 });
 
+
 //populate chat messages when open a chat with a user
 socket.on('populate_msgs', (data)=>{
-    console.log(data);
+    // console.log(data);
     
     for (var i in data){
         if(typeof data[i-1] === 'undefined') {
             if (data[i].author == get_username()){
                 var p = `<li class="left_msg"><div class="ul" style="left:2%;">${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
                 $('.chat').append(p);
-                // if($('.ul').text().length > 6){
-                //     $('.people').css('left','1000%');
-                // }
+                
             }else{
                 var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
                 $('.chat').append(p);
-                // if($('.ul').text().length > 6){
-                //     $('.people').css('left','1000%');
-                // }
+                
             }
         }
         else {
@@ -473,21 +483,44 @@ socket.on('populate_msgs', (data)=>{
             }
 
         }
-        
+
     }
     scrolltobottom();
 });
 
 //listen for message real time
 socket.on('message_client', (data)=>{
-    console.log(data);
+    // console.log(data);
     if ($('.people').is(':visible')){
         if ($(".om").text().slice(1) == data.author){
 
-            var p = `<li class="right_msg"><div class="ul">${data.date.substr(data.date.indexOf(' ')+1)}</div><div class="msg">${data.m}</div></li>`
+            var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data.date.substr(data.date.indexOf(' ')+1)}</div><div class="msg">${data.m}</div></li>`
             $('.chat').append(p);
 
+        }else{
+            status_newmsg(data.author, 1);
         }
-    };
+    }else{
+        status_newmsg(data.author, 1);
+    }
     scrolltobottom();
+});
+
+
+socket.on('seen_client',(data)=>{//status online offline users
+    for (var i in data){
+        if ($('.people').is(':visible')){
+            if ($(".om").text().slice(1) == Object.keys(data)[0]){
+    
+                socket.emit("remove_seen", {from: get_username(), to: $(".om").text().slice(1)});
+    
+            }else{
+                status_newmsg(Object.keys(data)[0], data[i]);
+            }
+        }else{
+            status_newmsg(Object.keys(data)[0], data[i]);
+        }
+        
+    }
+    
 });

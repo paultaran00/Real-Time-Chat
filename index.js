@@ -371,7 +371,7 @@ io.on('connection', function(socket){
         io.to(from).emit('onoff_client', obj);
 	});
     socket.on('message_chat_first', function(data){ //when receive first message on socket
-        var message_obj = {user1: data.from, user2: data.to, user1_seen: data.user1_seen, user2_seen: data.user2_seen, msgs: []}
+        var message_obj = {user1: data.from, user2: data.to, user1_seen: data.user1_seen, user2_seen: 1, msgs: []}
 		MongoClient.connect(uri, function(err, db) {
 			var dbc = db.db("chat");
 			dbc.collection("chat_messages").insertOne(message_obj)
@@ -404,6 +404,43 @@ io.on('connection', function(socket){
             db.close();
 		});
 
+
+        //update seen
+        const list = new Promise(function (resolve, reject) {
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                dbc.collection("chat_messages").find({$or: [ {user1: data.from, user2: data.to}, {user1: data.to, user2: data.from} ]}).toArray(function (err, result){
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(result);         
+                   }
+                   
+                });
+            db.close();
+               
+            });
+        });
+
+          list.then(result => {  
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                if(result[0].user1 == data.from){//partea de seen la mesaj
+                    dbc.collection("chat_messages").updateOne({user1: { $eq: data.from}, user2: { $eq: data.to}},{$set: { user2_seen : 1}});
+
+                }else if(result[0].user2 == data.from){
+                    dbc.collection("chat_messages").updateOne({user1: { $eq: data.to}, user2: { $eq: data.from}},{$set: { user1_seen : 1}});
+
+                }
+                
+                db.close();
+            });
+            
+          }).catch(err => console.log(err.message));
+
+
+
+
         var to;
         for (var i in users){
             if (users[i] == data.to){
@@ -412,9 +449,12 @@ io.on('connection', function(socket){
         }
 
         io.to(to).emit("message_client", data.mesg);
+
+        
+
 	});
 
-    socket.on('update_chat', function(data){ //when receive message on socket
+    socket.on('update_chat', function(data){ // populate chat
         var from;
         for (var i in users){
             if (users[i] == data.from){
@@ -433,6 +473,7 @@ io.on('connection', function(socket){
                     } else {
                         resolve(result);         
                    }
+                   
                 });
                 
             
@@ -450,7 +491,86 @@ io.on('connection', function(socket){
 
         
 	});
+
+
+
+
+
+    function searchdb(from, user, key){
+        if(user == '') 
+            return;
+        var ok;
+        const list = new Promise(function (resolve, reject) {
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                dbc.collection("chat_messages").find({$or: [ {user1: key, user2: user}, {user1: user, user2: key} ]}).toArray(function (err, result){
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(result);         
+                    }
+                    if(result[0].user1 == key){
+                       ok = 1;
+                    }
+                    else{
+                       ok = 2;
+                    }
+                });
+            db.close();
+               
+            });
+            
+        });
+        var obj = {};
+          list.then(result => {  
+            if (ok == 1){
+                obj[result[0].user1] = result[0].user2_seen;
+            }else{
+                obj[result[0].user2] =result[0].user1_seen;
+            }
+            // console.log(obj);
+            io.to(from).emit("seen_client", obj);
+          }).catch(err => console.log(err.message));
+
+    }
+
+
+
+
+    socket.on('update_seen', function(data){ //when receive message on socket
+        // console.log(data[1]);
+        // console.log(users_list);
+        suser = data[0]
+        obj = data[1];
+        // console.log(data[1][0].key());
+        var from;
+        for (var i in users){
+            if (users[i] == data[0]){
+                from = i;
+            }
+        }
+        for (var i in obj){
+            var key = Object.keys(obj[i])[0];
+            searchdb(from, suser, key);
+        }
+	});
+    
+
+
+    socket.on('remove_seen', function(data){ //remove seen
+        MongoClient.connect(uri, function(err, db) {
+            var dbc = db.db("chat");
+            
+            dbc.collection("chat_messages").updateOne({user1: { $eq: data.from}, user2: { $eq: data.to}},{$set: { user1_seen : 0}});
+            dbc.collection("chat_messages").updateOne({user1: { $eq: data.to}, user2: { $eq: data.from}},{$set: { user2_seen : 0}});
+  
+            db.close();
+        });
+	});
+
 });
+
+
 
 
 
