@@ -204,7 +204,7 @@ function add_group_to_list(){
                 dataType: 'text',
                 data: {group_n: gname, users: users, from: get_username()},
                 success: function (res){
-                    console.log(res);
+                    // console.log(res);
                     if(res == "exists"){
                         atentionare("Group name already exists");
                     }else if(res == "created"){
@@ -628,4 +628,11 @@ socket.on('seen_client',(data)=>{//status online offline users
         
     }
     
+});
+
+
+
+socket.on('add_group',(data)=>{//status online offline users
+    var gdiv = `<li class="lgrup">${data}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
+    $(".group-list").prepend(gdiv);
 });

@@ -295,7 +295,7 @@ function create_group_db(gname, arr, len){
     for (var i; i<len; i++ ){
         seen_list.push(0);
     }
-    console.log(seen_list)
+    // console.log(seen_list)
     var group_obj = {group_name: gname, users: arr, users_seen: seen_list, msgs: []}
     MongoClient.connect(uri, function(err, db) {
         var dbc = db.db("chat");
@@ -306,7 +306,6 @@ function create_group_db(gname, arr, len){
 
 //update users groups
 function update_users_groups(user, group){
-
     MongoClient.connect(uri, function(err, db) {
         var dbc = db.db("chat");
         dbc.collection("accounts").updateOne(
@@ -325,9 +324,12 @@ function update_users_groups(user, group){
 //create group
 app.post("/create_group", function(request,response){
     var g_name = request.body.group_n;
-    var users = request.body.users;
+    var userss = request.body.users;
     var from = request.body.from;
-    var array = users.split(' ');
+    var array = userss.split(' ');
+    // console.log(array);
+    var send_update = userss.split(' ');
+    // console.log(send_update);
     array.push(from);
     
     len = array.length;
@@ -344,6 +346,20 @@ app.post("/create_group", function(request,response){
                 for (i in array){
                     update_users_groups(array[i], g_name);
                 }
+
+                for (var i in send_update){
+                    var to;
+                    for (var j in users){
+                        // console.log(j + ":" + send_update[i]);
+                        if (users[j] == send_update[i]){
+                            
+                            to = j;
+                            // console.log(to);
+                            io.to(to).emit('add_group', g_name);
+                        }
+                    }
+                }
+
             }
 
         });
