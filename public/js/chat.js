@@ -568,34 +568,51 @@ $('.search').on('keydown', function() {
 
 function doneTyping() {
     var src_usr = $('.search').val();
-    $.ajax({
-        url: "/searchuser",
-        type: "POST",
-        dataType: 'text',
-        data: {src_usr:src_usr},
-        success: function (res){
-            if(res == "not_exists" || src_usr == get_username()){
-                $(".fa-times").show().delay(1000).fadeOut();
-            } else{
-                $(".fa-check").show().delay(1000).fadeOut();
-                $(".search").val("");
 
-                $('.chat').empty();
-                $('.om').remove();
-                $('.grup').remove();
-                var omdiv = `<div class="om">@${src_usr}</div>`;
-                $(".people").append(omdiv);
-                $('.people').css('padding-right','2%');
-                $('.people').css('background','#5154638c');
-                $('.people_menu').hide();
-                $('.people').show();
-                if ($('.begin').is(':visible')){
-                    $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
-                    $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
-                };
-            }
+    var obj = [];
+    var lnx = $('.chat-list .lom .name');
+    for (let i = 0; i < lnx.length; i++) {
+        obj.push(lnx[i].textContent.slice(1));
+    } 
+    if(obj.includes(src_usr)){
+        
+        var lnx = $('.chat-list .lom .name');
+    for (let i = 0; i < lnx.length; i++) {
+        if(lnx[i].textContent.slice(1) == src_usr){
+            lnx[i].click();
         }
-    });
+    } 
+    }else{
+        $.ajax({
+            url: "/searchuser",
+            type: "POST",
+            dataType: 'text',
+            data: {src_usr:src_usr},
+            success: function (res){
+                if(res == "not_exists" || src_usr == get_username()){
+                    $(".fa-times").show().delay(1000).fadeOut();
+                } else{
+                    $(".fa-check").show().delay(1000).fadeOut();
+                    $(".search").val("");
+    
+                    $('.chat').empty();
+                    $('.om').remove();
+                    $('.grup').remove();
+                    var omdiv = `<div class="om">@${src_usr}</div>`;
+                    $(".people").append(omdiv);
+                    $('.people').css('padding-right','2%');
+                    $('.people').css('background','#5154638c');
+                    $('.people_menu').hide();
+                    $('.people').show();
+                    if ($('.begin').is(':visible')){
+                        $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
+                        $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
+                    };
+                }
+            }
+        });
+    }
+
 }
 
 
