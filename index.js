@@ -683,7 +683,7 @@ io.on('connection', function(socket){
 	});
 
     socket.on('group_chat', function(data){ //group chat
-        console.log(data);
+        // console.log(data);
         from = data.from;
         seen_list = [];
 
@@ -704,8 +704,8 @@ io.on('connection', function(socket){
         });
 	});
 
-    socket.on('update_group', function(data){ //group chat
-        console.log(data);
+    socket.on('update_group', function(data){ // populate group chat
+        // console.log(data);
         var groupname = data.group_n;
         var from;
         for (var i in users){
@@ -737,6 +737,102 @@ io.on('connection', function(socket){
             io.to(from).emit("populate_group", arrayList[0].msgs);
           }).catch(err => console.log(err.message));
 	});
+
+
+    function searchdbgroup(from, user, key){
+        if(user == '') 
+            return;
+        if(key == '') 
+            return;
+        
+        const list = new Promise(function (resolve, reject) {
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                dbc.collection("group_messages").find({group_name: { $eq: key}}).toArray(function (err, result){
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(result);         
+                    }
+                });
+            db.close();
+               
+            });
+            
+        });
+        var obj = {};
+          list.then(result => {
+            for(var i=0; i<result[0].users.length;i++){
+                if(result[0].users[i] == user){
+                    obj[key] = result[0].users_seen[i];
+                    io.to(from).emit("seen_client_group", obj);
+                }
+            } 
+            
+            
+          }).catch(err => console.log(err.message));
+    }
+
+
+    socket.on('update_seen_group', function(data){ //when receive message on socket
+        // console.log(data[1]);
+        // console.log(users_list);
+        suser = data[0]
+        obj = data[1];
+        // console.log(data[1][0].key());
+        var from;
+        for (var i in users){
+            if (users[i] == data[0]){
+                from = i;
+            }
+        }
+        for (var i in obj){
+            var key = Object.keys(obj[i])[0];
+            searchdbgroup(from, suser, key);
+        }
+	});
+
+    socket.on('remove_seen_group', function(data){ //remove seen
+        // console.log(data.to);
+        // console.log(data.from);
+        const list = new Promise(function (resolve, reject) {
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                dbc.collection("group_messages").find({group_name: { $eq: data.to}}).toArray(function (err, result){
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(result);         
+                    }
+                });
+            db.close();
+               
+            });
+            
+        });
+        
+          list.then(result => {
+            var seen_list = [];
+            // console.log(result[0]);
+            for(var i=0; i<result[0].users.length;i++){
+                // console.log(result[0].users[i]);
+                // console.log(result[0].users_seen[i]);
+                if(result[0].users[i] != data.from){
+                    seen_list.push(result[0].users_seen[i]);
+                }else{
+                    seen_list.push(0);
+                }
+            }
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                dbc.collection("group_messages").updateOne({group_name: data.to}, {$set : { users_seen: seen_list }});
+                db.close();
+               
+            });
+            
+          }).catch(err => console.log(err.message));
+	});
+
 
 
 

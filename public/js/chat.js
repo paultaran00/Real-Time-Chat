@@ -77,6 +77,23 @@ function seen_status(){
 }
 
 setTimeout(seen_status, 500);
+
+function seen_status_group(){
+    var obj = []
+    var lnx = $('.group-list .lgrup');
+    for (let i = 0; i < lnx.length; i++) {
+        // console.log(lnx[i].textContent);
+        obj.push({[lnx[i].textContent]:0});
+    } 
+    // console.log(obj);
+    socket.emit("update_seen_group", [get_username(), obj]);
+    setTimeout(seen_status_group, 5000);
+}
+setTimeout(seen_status_group, 500);
+
+
+
+
 //conect to server socket
 var socket = io.connect("http://localhost:80");
 socket.emit("set_online", get_username());
@@ -511,6 +528,25 @@ function status_newmsg(person, newmsg){  // (%person, 1/0)
         }
     }
 };
+function status_newmsg_group(person, newmsg){  // (%person, 1/0)
+
+    if(newmsg==1){
+        for (var i=0;i<$(".lgrup").length;i++){
+            if($($(".lgrup")[i]).text() == person){
+                $($(".lgrup")[i]).find(".fa-envelope").css("color","#01bfbf");
+                
+            }
+        } 
+    }
+    else{
+        for (var i=0;i<$(".lgrup").length;i++){
+            if($($(".lgrup")[i]).text() == person){
+                $($(".lgrup")[i]).find(".fa-envelope").css("color","#01bfbf1a");
+                
+            }
+        }
+    }
+};
 //exemple de adaugare online si new message
 
 
@@ -665,7 +701,7 @@ socket.on('message_client', (data)=>{
 });
 
 
-socket.on('seen_client',(data)=>{//status online offline users
+socket.on('seen_client',(data)=>{//seen status update
     for (var i in data){
         if ($('.people').is(':visible')){
             if ($(".om").text().slice(1) == Object.keys(data)[0]){
@@ -726,5 +762,25 @@ socket.on('populate_group',(data)=>{//populate group
 
     }
     scrolltobottom();
+    
+});
+
+
+socket.on('seen_client_group',(data)=>{//seen status update
+    // console.log(data);
+    for (var i in data){
+        if ($('.people').is(':visible')){
+            if ($(".grup").text() == Object.keys(data)[0]){
+    
+                socket.emit("remove_seen_group", {from: get_username(), to: $(".grup").text()});
+    
+            }else{
+                status_newmsg_group(Object.keys(data)[0], data[i]);
+            }
+        }else{
+            status_newmsg_group(Object.keys(data)[0], data[i]);
+        }
+        
+    }
     
 });
