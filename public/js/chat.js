@@ -337,22 +337,7 @@ $(document).ready(function() {
             $(this).find('.fa-envelope').css("color","#01bfbf1a");
 
             
-            // socket.emit("remove_seen_group", {group_n: groupname, from: get_username()}); TREBE
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            socket.emit("remove_seen_group", {from: get_username(), to: $(".grup").text()});
 
         }
 
@@ -783,4 +768,23 @@ socket.on('seen_client_group',(data)=>{//seen status update
         
     }
     
+});
+
+
+//listen for group message real time
+socket.on('group_message_client', (data)=>{
+    // console.log(data);
+    if ($('.people').is(':visible')){
+        if ($(".grup").text() == data[0]){
+
+            var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[1].author} ${data[1].date.substr(data[1].date.indexOf(' ')+1)}</div><div class="msg">${data[1].m}</div></li>`
+            $('.chat').append(p);
+
+        }else{
+            status_newmsg_group(data[0], 1);
+        }
+    }else{
+        status_newmsg_group(data[0], 1);
+    }
+    scrolltobottom();
 });

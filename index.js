@@ -686,7 +686,8 @@ io.on('connection', function(socket){
         // console.log(data);
         from = data.from;
         seen_list = [];
-
+        var l = data.group_memb;
+        //update seen
         for(var i = 0; i<data.group_memb.length; i++){
             if(data.group_memb[i] != from){
                 seen_list.push(1);
@@ -702,6 +703,26 @@ io.on('connection', function(socket){
 
             db.close();
         });
+
+        const index = l.indexOf(from);
+        if (index > -1) {
+            l.splice(index, 1);
+        }
+        // console.log(l);
+        var obj = []
+        obj.push(data.gr_name);
+        obj.push(data.mesg);
+        for (var j in l){
+            for (var i in users){
+                if (users[i] == l[j]){
+                    // console.log(i);
+                    io.to(i).emit("group_message_client", obj);
+                }
+            }
+        }
+        
+
+        
 	});
 
     socket.on('update_group', function(data){ // populate group chat
