@@ -576,7 +576,7 @@ function doneTyping() {
     } 
     if(obj.includes(src_usr)){
         
-        var lnx = $('.chat-list .lom .name');
+    var lnx = $('.chat-list .lom .name');
     for (let i = 0; i < lnx.length; i++) {
         if(lnx[i].textContent.slice(1) == src_usr){
             lnx[i].click();

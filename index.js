@@ -483,11 +483,12 @@ io.on('connection', function(socket){
         io.to(from).emit('onoff_client', obj);
 	});
     socket.on('message_chat_first', function(data){ //when receive first message on socket
-        var message_obj = {user1: data.from, user2: data.to, user1_seen: data.user1_seen, user2_seen: 1, msgs: []}
+        var message_obj = {user1: data.from, user2: data.to, user1_seen: data.user1_seen, user2_seen: 1, msgs: [data.mesg]}
 		MongoClient.connect(uri, function(err, db) {
 			var dbc = db.db("chat");
 			dbc.collection("chat_messages").insertOne(message_obj)
-            dbc.collection("chat_messages").updateOne({user1: data.from, user2: data.to}, {$push : { msgs: data.mesg }});
+            // console.log(data.mesg);
+            // dbc.collection("chat_messages").updateOne({user1: data.from, user2: data.to}, {$push : { msgs: data.mesg }});
             // console.log(data.mesg);
 
             db.close();
