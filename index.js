@@ -5,7 +5,7 @@ const http = require('http').createServer(app);
 const url = require('url');
 var io = require('socket.io')(http);
 const mongo = require("mongodb");
-
+const bcrypt = require('bcrypt');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -111,9 +111,19 @@ app.post('/regadd', function(request, response){
         var pass = request.body.password;
         var quest = request.body.question;
         var ans = request.body.answer;
+
+        //crypt pass and answer
+        const saltRounds = 10;
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const passhash = bcrypt.hashSync(pass, salt);
+        const anshash = bcrypt.hashSync(ans, salt);
+
+
+
+
         if (add==1){
             MongoClient.connect(uri, function(err, db) {
-                obj={username: user, password: pass, question: quest, answer: ans, friends:[], groups:[]};
+                obj={username: user, password: passhash, question: quest, answer: anshash, friends:[], groups:[]};
                 var dbc = db.db("chat");
                 dbc.collection("accounts").insertOne(obj);
 
@@ -142,7 +152,7 @@ app.post("/login", function(request,response){
             }
             else{
                 var a = result[0];
-                if(pass == a.password){
+                if(bcrypt.compareSync(pass, a.password)){
                     request.session.username=user;
                     response.redirect("/chat")
                     
@@ -176,7 +186,7 @@ app.post("/changepass", function(request,response){
             else{
                 var a = result[0];
                 if(question == a.question){
-                    if(answer == a.answer){
+                    if(bcrypt.compareSync(answer, a.answer)){
                         response.send("succes");
                     }
                     else{
@@ -204,10 +214,15 @@ app.post("/changepasdatabase", function(request,response){
         response.send("tooshort");
     }
     else if(newpass.length >= 6){
+        //criptare
+        const saltRounds = 10;
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const newpasshash = bcrypt.hashSync(newpass, salt);
+
         MongoClient.connect(uri, function(err, db) {
             response.send("changed");
             var dbc = db.db("chat");
-            dbc.collection("accounts").updateOne({username: { $eq: user}},{$set: { password : newpass}});
+            dbc.collection("accounts").updateOne({username: { $eq: user}},{$set: { password : newpasshash}});
             db.close();
         });
     }
@@ -859,11 +874,6 @@ io.on('connection', function(socket){
 
 
 });
-
-
-
-
-
 
 
 http.listen(80, () => {
