@@ -292,10 +292,11 @@ app.post("/populate_groups", function(request,response){
 
 function create_group_db(gname, arr, len){
     seen_list = [];
-    for (var i; i<len; i++ ){
+
+    for (var i = 0; i<len; i++ ){
         seen_list.push(0);
     }
-    // console.log(seen_list)
+    // console.log(seen_list);
     var group_obj = {group_name: gname, users: arr, users_seen: seen_list, msgs: []}
     MongoClient.connect(uri, function(err, db) {
         var dbc = db.db("chat");
@@ -336,8 +337,8 @@ app.post("/create_group", function(request,response){
     MongoClient.connect(uri, function(err, db) {
         var dbc = db.db("chat");
         dbc.collection("group_messages").find({group_name: { $eq: g_name}}).toArray(function (err, result){
-            len = result.length;
-            if (len != 0){
+            lenn = result.length;
+            if (lenn != 0){
                 response.send("exists");
             }else{
                 create_group_db(g_name, array, len);
@@ -346,7 +347,8 @@ app.post("/create_group", function(request,response){
                 for (i in array){
                     update_users_groups(array[i], g_name);
                 }
-
+                
+                //send to online users to update real time
                 for (var i in send_update){
                     var to;
                     for (var j in users){
@@ -368,6 +370,22 @@ app.post("/create_group", function(request,response){
     });
 });
 
+//group users
+app.post("/group_users", function(request,response){
+    var groupname = request.body.group_n;
+
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("group_messages").find({group_name: { $eq: groupname}}).toArray(function (err, result){
+            // console.log(result[0]);
+            response.send(result[0].users);
+            
+        });
+
+        db.close();
+    });
+
+});
 // app.post("/online_status", function(request,response){
 //     var arr = request.body.arr;
 //     console.log(user);
@@ -664,7 +682,67 @@ io.on('connection', function(socket){
         });
 	});
 
+    socket.on('group_chat', function(data){ //group chat
+        console.log(data);
+        from = data.from;
+        seen_list = [];
+
+        for(var i = 0; i<data.group_memb.length; i++){
+            if(data.group_memb[i] != from){
+                seen_list.push(1);
+            }else{
+                seen_list.push(0);
+            }
+        }
+        MongoClient.connect(uri, function(err, db) {
+            var dbc = db.db("chat");
+            
+            dbc.collection("group_messages").updateOne({group_name: data.gr_name}, {$push : { msgs: data.mesg }});
+            dbc.collection("group_messages").updateOne({group_name: data.gr_name}, {$set : { users_seen: seen_list }});
+
+            db.close();
+        });
+	});
+
+    socket.on('update_group', function(data){ //group chat
+        console.log(data);
+        var groupname = data.group_n;
+        var from;
+        for (var i in users){
+            if (users[i] == data.from){
+                from = i;
+            }
+        }
+
+		
+        const list = new Promise(function (resolve, reject) {
+            MongoClient.connect(uri, function(err, db) {
+                var dbc = db.db("chat");
+                dbc.collection("group_messages").find({group_name: { $eq: groupname}}).toArray(function (err, result){
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(result);         
+                   }
+                   
+                });
+            
+            db.close();
+               
+            });
+        });
+
+          list.then(arrayList => {
+            // console.log(arrayList[0].msgs);
+            io.to(from).emit("populate_group", arrayList[0].msgs);
+          }).catch(err => console.log(err.message));
+	});
+
+
+
 });
+
+
 
 
 

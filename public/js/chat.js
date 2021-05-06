@@ -281,10 +281,10 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $(document).on('click', '.lgrup', function() {
-        var username = $(this).text();
+        var groupname = $(this).text();
         $('.om').remove();
         $('.grup').remove();
-        var grupdiv = `<div class="grup">${username}</div>`;
+        var grupdiv = `<div class="grup">${groupname}</div>`;
         $(".people").append(grupdiv);
         $('.people').css('padding-right','5%');
         $('.people').css('background','#5154638c');
@@ -294,7 +294,55 @@ $(document).ready(function() {
             $('.begin').animate({height: "toggle", opacity: "toggle"}, "slow");
             $('.right').animate({height: "toggle", opacity: "toggle"}, "slow");
         };
-        // setTimeout(scrolltobottom, 500);
+        $('.chat').empty();
+        $(".group_users").empty();
+
+
+        $.ajax({
+            url: "/group_users",
+            type: "POST",
+            dataType: 'text',
+            data: {group_n: groupname},
+            success: function (res){
+                res = JSON.parse(res);
+                // res = res.reverse()
+                for (i in res){
+                    // console.log(res[i]);
+                    var v = `<li class="group_usr">@${res[i]}</li>`
+                    $(".group_users").append(v);
+                }
+                    
+                 
+            }
+        });
+
+        if($(this).find('.fa-envelope').css("color") == "rgb(1, 191, 191)"){
+            $(this).find('.fa-envelope').css("color","#01bfbf1a");
+
+            
+            // socket.emit("remove_seen_group", {group_n: groupname, from: get_username()}); TREBE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+        socket.emit("update_group", {group_n: groupname, from: get_username()});
+
+
+
     });
     
 });
@@ -317,16 +365,18 @@ function time(d){
 //functie insert mesage
 function insert_message(){
     if( $(".sendmsg_input").val().length > 0 && $(".sendmsg_input").val() != " " && $(".sendmsg_input").val() != "  "&& $(".sendmsg_input").val() != "   "&& $(".sendmsg_input").val() != "    "&& $(".sendmsg_input").val() != "     "){
-        var to_person = $(".om").text().slice(1);
+        
         // console.log(to_person);
         var mesaj = $(".sendmsg_input").val();
         var fullt = fulltime(new Date());
         var t = time(new Date());
         $('.sendmsg_input').val('');
-        var este = 0;
+        
 
         
         if ($('.om').is(':visible')){
+            var este = 0;
+            var to_person = $(".om").text().slice(1);
             var limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${t}</div><div class="msg">${mesaj}</div></li>`;
             
             var lnx = $('.chat-list .lom .name');  //verifica daca userul este in lista de frecventi
@@ -337,34 +387,37 @@ function insert_message(){
                 }
             }
 
+
+            if(este == 0){    //il adauga in lista de frecventi daca nu este
+                var om = $(".om").text();
+                var a = `<li class="lom"><span class="name">${om}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`
+                $(".chat-list").prepend(a);
+    
+                socket.emit("add_friends_list", [om.slice(1), get_username()]);
+                socket.emit("message_chat_first", {from: get_username(), to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
+                var first_limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${fullt}</div><div class="msg">${mesaj}</div></li>`;
+                $(".chat").append(first_limesaj);
+            }else if(este == 1){
+    
+                socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
+                $(".chat").append(limesaj);
+            }
         }
-
-        if(este == 0){    //il adauga in lista de frecventi daca nu este
-            var om = $(".om").text();
-            var a = `<li class="lom"><span class="name">${om}</span><div class="fas fa-envelope"></div><div class="status"><div class="fas fa-circle"><div class="on-off">offline</div></div></div></li>`
-            $(".chat-list").prepend(a);
-
-            socket.emit("add_friends_list", [om.slice(1), get_username()]);
-            socket.emit("message_chat_first", {from: get_username(), to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
-            var first_limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${fullt}</div><div class="msg">${mesaj}</div></li>`;
-            $(".chat").append(first_limesaj);
-        }else{
-
-            socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
-            $(".chat").append(limesaj);
-        }
-
         
 
-
-
-
-
-
-
         if ($('.grup').is(':visible')){
-            var limesaj = `<li class="left_msg"><div class="ul">@${get_username()} ${time}</div><div class="msg">${mesaj}</div></li>`;
-
+            group_users = [];
+            var lnx = $('.group_users .group_usr');  //ia lista cu group members
+            for (let i = 0; i < lnx.length; i++) {
+                var txt = lnx[i].textContent.slice(1);
+                group_users.push(txt);
+            }
+            // console.log(group_users);
+            var gr = $(".grup").text();
+            // console.log(gr);
+            var limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">You ${t}</div><div class="msg">${mesaj}</div></li>`;
+            $(".chat").append(limesaj);
+            socket.emit("group_chat", {gr_name: gr, from: get_username(), group_memb: group_users, mesg: {author: get_username(), date: fullt, m: mesaj}});
 
             //group chat
         }
@@ -635,4 +688,43 @@ socket.on('seen_client',(data)=>{//status online offline users
 socket.on('add_group',(data)=>{//status online offline users
     var gdiv = `<li class="lgrup">${data}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
     $(".group-list").prepend(gdiv);
+});
+
+socket.on('populate_group',(data)=>{//populate group
+    for (var i in data){
+        if(typeof data[i-1] === 'undefined') {
+            if (data[i].author == get_username()){
+                var p = `<li class="left_msg"><div class="ul" style="left:2%;">You ${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
+                $('.chat').append(p);
+                
+            }else{
+                var p = `<li class="right_msg"><div class="ul" style="right:2%;">@${data[i].author} ${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
+                $('.chat').append(p);
+                
+            }
+        }
+        else {
+            if (data[i-1].date.substr(0, data[i-1].date.indexOf(' ')) == data[i].date.substr(0, data[i-1].date.indexOf(' '))){
+                if (data[i].author == get_username()){
+                    var p = `<li class="left_msg"><div class="ul" style="left:2%;">You ${data[i].date.substr(data[i].date.indexOf(' ')+1)}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }else{
+                    var p = `<li class="right_msg"><div class="ul" style="right:2%;">@${data[i].author} ${data[i].date.substr(data[i].date.indexOf(' ')+1)}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }
+            }else{
+                if (data[i].author == get_username()){
+                    var p = `<li class="left_msg"><div class="ul" style="left:2%;">You ${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }else{
+                    var p = `<li class="right_msg"><div class="ul" style="right:2%;">@${data[i].author} ${data[i].date}</div><div class="msg">${data[i].m}</div></li>`
+                    $('.chat').append(p);
+                }
+            }
+
+        }
+
+    }
+    scrolltobottom();
+    
 });
