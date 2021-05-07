@@ -829,6 +829,10 @@ $(document).ready(function() {
             $(".fa-smile-beam").toggleClass("smile_icon_active");
         }
         
+        if($('.smiles-active').is(':visible')){
+            $(".smileys").toggleClass("smiles-active");
+            $(".fa-smile-beam").toggleClass("smile_icon_active");
+        }
     });
 
     $('.smileys').on('click', '.emoji', function() {
