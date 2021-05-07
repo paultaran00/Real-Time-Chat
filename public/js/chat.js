@@ -497,10 +497,12 @@ $(document).ready(function() {
 
 // se ascund windowurile
 $(document).ready(function() {
-    $('.sendmsg_input, .lgrup, .lom, .search, .background_pattern, .group-list').click(function(){
+    
+    $('.chat-page').on('click', '.sendmsg_input, .lgrup, .lom, .search, .background_pattern, .group-list', function() {
+
         if ($('.group_users').is(':visible')){
-            $(".fa-chevron-down").toggleClass("toggle-arrow");
-            $('.group_users').animate({opacity: "toggle"}, "slow");
+            $(".fa-chevron-down").removeClass("toggle-arrow");
+            $('.group_users').hide();
             
             // $(".smileys").css("display","none");
             // $(".fa-smile-beam").css("color", "white");
