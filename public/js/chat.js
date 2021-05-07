@@ -427,6 +427,10 @@ function insert_message(){
 
 
         scrolltobottom();
+        if($('.smileys').is(':visible')){
+            $(".smileys").toggleClass("smiles-active");
+            $(".fa-smile-beam").toggleClass("smile_icon_active");
+        }
     };
 }
 
@@ -464,6 +468,9 @@ $(document).ready(function() {
         if ($('.group_users').is(':visible')){
             $(".fa-chevron-down").toggleClass("toggle-arrow");
             $('.group_users').animate({opacity: "toggle"}, "slow");
+            
+            // $(".smileys").css("display","none");
+            // $(".fa-smile-beam").css("color", "white");
         }
         if( $('.creategroup-window').is(':visible') ) {
             // $(".creategroup-window").hide();
@@ -804,4 +811,30 @@ socket.on('group_message_client', (data)=>{
         status_newmsg_group(data[0], 1);
     }
     scrolltobottom();
+});
+
+
+$(document).ready(function() {
+    $('.fa-smile-beam').click(function(){
+        // $(".smileys").css("display","grid");
+        // $(".fa-smile-beam").css("color", "#02e7e7");
+
+        $(".smileys").toggleClass("smiles-active");
+        $(".fa-smile-beam").toggleClass("smile_icon_active");
+    });
+
+    $('.lgrup, .lom, .search, .background_pattern, .group-list, .fa-paper-plane').click(function(){
+        if($('.smileys').is(':visible')){
+            $(".smileys").toggleClass("smiles-active");
+            $(".fa-smile-beam").toggleClass("smile_icon_active");
+        }
+        
+    });
+
+    $('.smileys').on('click', '.emoji', function() {
+        // console.log($(this).text());
+        // $('.sendmsg_input').val('') += $(this).text();
+        $('.sendmsg_input').val($('.sendmsg_input').val() + $(this).text());
+
+    });
 });
