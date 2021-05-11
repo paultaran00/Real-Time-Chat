@@ -160,3 +160,55 @@ form input[type="submit"], form input[type="submit-norefresh"] {
   display: none;
   border-radius: 10px;
 }
+
+
+@media only screen and (max-width: 750px) {
+  *{
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+  body{
+    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow: hidden;
+  }
+  .login-page{
+    left: -4%;
+    top: 31%;
+    transform: scale(0.7);
+  }
+  .logo{
+    display: none;
+  }
+  .presentation{
+    top: 12%;
+    left: 45%;
+    display: inline-block;
+    /* width: ; */
+    transform: scale(0.7);
+    left: -7%;
+    margin-left: 0%;
+  }
+  .presentation p{
+    font-size: 15px;
+    width: 77%;
+    display: inline-block;
+    
+  }
+  .speakfreely{
+    font-size: 163%;
+    display: inline-block;
+    margin-top: 0%;
+  }
+  
+
+  .earth{
+    display: none;
+  }
+  .stars{
+    display: none;
+  }
+  .chaticon{
+    display: none;
+  }
+}

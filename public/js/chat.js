@@ -289,6 +289,7 @@ $(document).ready(function() {
         }
         $('.chat').empty();
         socket.emit("update_chat", {from: get_username(), to: username.slice(1)});
+        setTimeout(sametime, 50);
         // setTimeout(scrolltobottom, 100);
 
     });
@@ -343,7 +344,7 @@ $(document).ready(function() {
 
         socket.emit("update_group", {group_n: groupname, from: get_username()});
 
-
+        setTimeout(sametime, 100);
 
     });
     
@@ -397,6 +398,60 @@ function time(d){
     + pad(d.getUTCMinutes())
 }
 
+//compreseaza mesajele care au acelas timp de trimitre
+function sametime(){
+    var lnx = $('.chat .left_msg .ul');
+    // console.log(lnx);
+    if (typeof lnx[0] != "undefined"){
+        var s = lnx[0].outerHTML;
+        var reg = /.[0-9]:[0-9]./g;
+        var pasttime = s.match(reg);
+    
+        for (var i in lnx){
+    
+            if(typeof lnx[i-1] != 'undefined') {
+    
+                var s = lnx[i].outerHTML;
+                var reg = /.[0-9]:[0-9]./g;
+                mat = s.match(reg);
+       
+                if (pasttime[0] == mat[0]){
+                    $('.chat .left_msg:eq('+i+') .ul').css("display", "none");
+                    $('.chat .left_msg:eq('+i+')').css("margin-top", "0.5%");
+                }
+                pasttime = mat;
+            }
+        }
+    }
+
+
+    //rigth side
+    var lnxr = $('.chat .right_msg .ul');
+    if (typeof lnxr[0] != "undefined"){
+        var ss = lnxr[0].outerHTML;
+        var regg = /.[0-9]:[0-9]./g;
+        var pasttimer = ss.match(regg);
+
+        for (var j in lnxr){
+
+            if(typeof lnxr[j-1] != 'undefined') {
+
+                var ss = lnxr[j].outerHTML;
+                var regg = /.[0-9]:[0-9]./g;
+                matt = ss.match(regg);
+                
+                if (pasttimer[0] == matt[0]){
+                    $('.chat .right_msg:eq('+j+') .ul').css("display", "none");
+                    $('.chat .right_msg:eq('+j+')').css("margin-top", "0.5%");
+                }
+                pasttimer = matt;
+            }
+        }
+    }
+    
+    
+}
+
 //functie insert mesage
 function insert_message(){
     if( $(".sendmsg_input").val().length > 0 && $(".sendmsg_input").val() != " " && $(".sendmsg_input").val() != "  "&& $(".sendmsg_input").val() != "   "&& $(".sendmsg_input").val() != "    "&& $(".sendmsg_input").val() != "     "){
@@ -412,7 +467,12 @@ function insert_message(){
         if ($('.om').is(':visible')){
             var este = 0;
             var to_person = $(".om").text().slice(1);
-            var limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${t}</div><div class="msg">${mesaj}</div></li>`;
+            if($('.chat .left_msg:last-child .ul').text() == t){
+                var limesaj = `<li class="left_msg" style="margin-top: 0.5%;"><div class="ul" style="left:2%; display:none; ">${t}</div><div class="msg">${mesaj}</div></li>`;
+            }else{
+                var limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${t}</div><div class="msg">${mesaj}</div></li>`;
+            }
+            
             
             var lnx = $('.chat-list .lom .name');  //verifica daca userul este in lista de frecventi
             for (let i = 0; i < lnx.length; i++) {
@@ -433,7 +493,7 @@ function insert_message(){
                 var first_limesaj = `<li class="left_msg"><div class="ul" style="left:2%;">${fullt}</div><div class="msg">${mesaj}</div></li>`;
                 $(".chat").append(first_limesaj);
             }else if(este == 1){
-    
+                
                 socket.emit("message_chat", {from: get_username(), to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: get_username(), date: fullt, m: mesaj}})
                 $(".chat").append(limesaj);
             }
