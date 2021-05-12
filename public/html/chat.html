@@ -5,13 +5,13 @@
     <title>Chat</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta charset="ISO-8859-1">
-    <link rel="stylesheet" href="/css/chat.css">
-    <link rel="stylesheet" href="/css/chat_button.css">
-
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/chat.css">
+    <link rel="stylesheet" href="/css/chat_button.css">
 </head>
 
 <body>
@@ -93,6 +93,7 @@
             </div>
         </div>
         <div class="right">
+            <i class="fas fa-arrow-left"></i>
             <div class="people_menu"><i class="fas fa-chevron-down"></i></div>
             <ul class="group_users">
                 <!-- <li class="group_usr">@paultaran</li>
@@ -139,6 +140,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/socket.io"></script>
     <script src="/js/chat.js"></script>
+    <script src="/js/mobile.js"></script>
     
 </body>
 

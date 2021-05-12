@@ -234,6 +234,7 @@ app.post("/changepasdatabase", function(request,response){
 
 app.post("/getusername", function(request,response){ 
     response.send(request.session.username);
+    console.log(request.session.username);
 
 });
 
@@ -629,22 +630,22 @@ io.on('connection', function(socket){
             return;
         if(key == '') 
             return;
+        if(typeof user === 'undefined') 
+            return;
+        if(typeof key === 'undefined') 
+            return;
         var ok;
         const list = new Promise(function (resolve, reject) {
             MongoClient.connect(uri, function(err, db) {
                 var dbc = db.db("chat");
                 dbc.collection("chat_messages").find({$or: [ {user1: key, user2: user}, {user1: user, user2: key} ]}).toArray(function (err, result){
+                    // console.log(result[0]);
                     if(err) {
                         reject(err);
                     } else {
                         resolve(result);         
                     }
-                    if(result[0].user1 == key){
-                       ok = 1;
-                    }
-                    else{
-                       ok = 2;
-                    }
+                    
                 });
             db.close();
                
@@ -653,6 +654,13 @@ io.on('connection', function(socket){
         });
         var obj = {};
           list.then(result => {  
+            //   console.log(result[0]);
+            if(result[0].user1 == key){
+                ok = 1;
+             }
+             else{
+                ok = 2;
+             }
             if (ok == 1){
                 obj[result[0].user1] = result[0].user2_seen;
             }else{
@@ -875,9 +883,11 @@ io.on('connection', function(socket){
 
 });
 
-
-http.listen(80, () => {
+// 44444'192.168.0.222',
+http.listen(80,  () => {
 	console.log('listening on *:80');
 });
+
+
 
 

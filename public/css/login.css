@@ -164,34 +164,40 @@ form input[type="submit"], form input[type="submit-norefresh"] {
 
 @media only screen and (max-width: 750px) {
   *{
-    overflow-y: hidden;
-    overflow-x: hidden;
+    /* overflow-y: hidden;
+    overflow-x: hidden; */
   }
   body{
-    overflow-y: hidden;
+    /* overflow-y: hidden;
     overflow-x: hidden;
-    overflow: hidden;
+    overflow: hidden; */
   }
   .login-page{
-    left: -4%;
-    top: 31%;
-    transform: scale(0.7);
+    all: unset;
+    position: relative;
+    
+    top: 35%;
+
+    
+    /* margin: 0 auto; */
   }
   .logo{
     display: none;
   }
   .presentation{
+    all: unset;
+    position: absolute;
+    top: 10%; right: 0; bottom: 0; left: 10%;
     top: 12%;
-    left: 45%;
-    display: inline-block;
-    /* width: ; */
+    /* left: 45%; */
+    /* display: inline-block;
     transform: scale(0.7);
     left: -7%;
-    margin-left: 0%;
+    margin-left: 0%; */
   }
   .presentation p{
     font-size: 15px;
-    width: 77%;
+    width: 90%;
     display: inline-block;
     
   }
@@ -211,4 +217,5 @@ form input[type="submit"], form input[type="submit-norefresh"] {
   .chaticon{
     display: none;
   }
+
 }
