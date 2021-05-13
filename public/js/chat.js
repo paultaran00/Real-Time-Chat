@@ -96,7 +96,7 @@ setTimeout(seen_status_group, 500);
 
 // 5.15.137.48:44444/
 //conect to server socket
-var socket = io.connect("http://localhost:80");
+var socket = io.connect("http://localhost:80/");
 socket.emit("set_online", user_name);
 
 
@@ -390,12 +390,12 @@ function fulltime(d){
     return d.getUTCFullYear()+'-'
     + pad(months[d.getMonth()])+'-'
     + pad(d.getUTCDate())+' '
-    + pad(d.getUTCHours()+3)+':'
+    + pad((d.getUTCHours()+3) % 24)+':'
     + pad(d.getUTCMinutes())
 }
 function time(d){
     function pad(n){return n<10 ? '0'+n : n}
-    return pad(d.getUTCHours()+3)+':'
+    return pad((d.getUTCHours()+3) % 24)+':'
     + pad(d.getUTCMinutes())
 }
 
@@ -808,6 +808,7 @@ socket.on('populate_msgs', (data)=>{
 
     }
     scrolltobottom();
+    setTimeout(sametime, 10);
 });
 
 //listen for message real time
@@ -818,6 +819,7 @@ socket.on('message_client', (data)=>{
 
             var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data.date.substr(data.date.indexOf(' ')+1)}</div><div class="msg">${data.m}</div></li>`
             $('.chat').append(p);
+            setTimeout(sametime, 10);
 
         }else{
             status_newmsg(data.author, 1);
@@ -890,6 +892,7 @@ socket.on('populate_group',(data)=>{//populate group
 
     }
     scrolltobottom();
+    setTimeout(sametime, 10);
     
 });
 
@@ -922,6 +925,7 @@ socket.on('group_message_client', (data)=>{
 
             var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[1].author} ${data[1].date.substr(data[1].date.indexOf(' ')+1)}</div><div class="msg">${data[1].m}</div></li>`
             $('.chat').append(p);
+            setTimeout(sametime, 10);
 
         }else{
             status_newmsg_group(data[0], 1);
