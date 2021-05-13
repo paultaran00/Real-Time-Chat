@@ -290,7 +290,7 @@ $(document).ready(function() {
         }
         $('.chat').empty();
         socket.emit("update_chat", {from: user_name, to: username.slice(1)});
-        setTimeout(sametime, 50);
+        sametime();
         // setTimeout(scrolltobottom, 100);
 
     });
@@ -345,7 +345,7 @@ $(document).ready(function() {
 
         socket.emit("update_group", {group_n: groupname, from: user_name});
 
-        setTimeout(sametime, 100);
+        sametime();
 
     });
     
@@ -510,7 +510,7 @@ function insert_message(){
                 
                 socket.emit("message_chat", {from: user_name, to: to_person, user1_seen: 0, user2_seen: 0, mesg: {author: user_name, date: fullt, m: mesaj}})
                 $(".chat").append(limesaj);
-                setTimeout(sametime, 10);
+                sametime();
             }
         }
         
@@ -529,7 +529,7 @@ function insert_message(){
             $(".chat").append(limesaj);
             
             socket.emit("group_chat", {gr_name: gr, from: user_name, group_memb: group_users, mesg: {author: user_name, date: fullt, m: mesaj}});
-            setTimeout(sametime, 10);
+            sametime();
             //group chat
         }
         
@@ -808,7 +808,7 @@ socket.on('populate_msgs', (data)=>{
 
     }
     scrolltobottom();
-    setTimeout(sametime, 10);
+    sametime();
 });
 
 //listen for message real time
@@ -819,7 +819,7 @@ socket.on('message_client', (data)=>{
 
             var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data.date.substr(data.date.indexOf(' ')+1)}</div><div class="msg">${data.m}</div></li>`
             $('.chat').append(p);
-            setTimeout(sametime, 10);
+            sametime();
 
         }else{
             status_newmsg(data.author, 1);
@@ -892,7 +892,7 @@ socket.on('populate_group',(data)=>{//populate group
 
     }
     scrolltobottom();
-    setTimeout(sametime, 10);
+    sametime();
     
 });
 
@@ -925,7 +925,7 @@ socket.on('group_message_client', (data)=>{
 
             var p = `<li class="right_msg"><div class="ul" style="right:2%;">${data[1].author} ${data[1].date.substr(data[1].date.indexOf(' ')+1)}</div><div class="msg">${data[1].m}</div></li>`
             $('.chat').append(p);
-            setTimeout(sametime, 10);
+            sametime();
 
         }else{
             status_newmsg_group(data[0], 1);
