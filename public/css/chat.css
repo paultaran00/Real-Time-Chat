@@ -973,6 +973,59 @@ input[type="submit"]:hover, .submit-group:hover, .create-group:hover {
       display: none;
   }
 
+  .fa-times-circle{
+      color: rgb(253, 194, 194);
+      position: absolute;
+      top: -11px;
+      cursor: pointer;
+  }
+  .fa-times-circle:hover{
+    color: rgb(207, 91, 91);
+  }
+
+  .fa-user-plus{
+    color: white;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    cursor: pointer;
+  }
+  .fa-user-plus:hover{
+    color: #01bfbf;
+  }
+
+  .add_usr{
+    outline: 0;
+    background: #44475300;
+    color: white;
+    width: 90%;
+    margin-right: 10%;
+    border: 0;
+    padding: 5px;
+    box-sizing: border-box;
+    /* font-size: 90%; */
+    border-radius: 10px;
+    z-index: 2;
+  }
+
+  .add_usr::placeholder { 
+    color: white;
+    opacity: 1; 
+  }
+
+  .fa-plus{
+    float: right;
+    color: white;
+    position: absolute;
+    right: 3%;
+    top: 30%;
+    cursor: pointer;
+  }
+
+  .fa-plus-red{
+      color: red;
+  }
+
 
   @media only screen and (max-width: 750px) {
     .begin{

@@ -327,9 +327,12 @@ $(document).ready(function() {
                 // res = res.reverse()
                 for (i in res){
                     // console.log(res[i]);
-                    var v = `<li class="group_usr">@${res[i]}</li>`
+                    var v = `<li class="group_usr">@${res[i]}<i class="far fa-times-circle"></i></li>`
                     $(".group_users").append(v);
                 }
+                var add = `<i class="fas fa-user-plus"></i>`;
+                $(".group_users").append(add);
+
                     
                  
             }
@@ -351,6 +354,7 @@ $(document).ready(function() {
     
 });
 
+//emojiuri
 $(document).ready(function() {
     $('.fa-smile-beam').click(function(){
         // $(".smileys").css("display","grid");
@@ -371,6 +375,10 @@ $(document).ready(function() {
         if($('.smiles-active').is(':visible')){
             $(".smileys").removeClass("smiles-active");
             $(".fa-smile-beam").removeClass("smile_icon_active");
+        }
+
+        if($('.add_usr').parent().is(':visible')){
+            $(".add_usr").parent().remove();
         }
     });
 
@@ -742,7 +750,49 @@ function doneTyping() {
 }
 
 
+//add new member to group
 
+$(document).ready(function() {
+    $(document).on('click', '.fa-user-plus', function() {
+        if($('.add_usr').parent().is(':visible')){
+            $(".add_usr").parent().remove();
+        }else{
+            
+            var add = `<li class="group_usr"><input class="add_usr" type="text" placeholder="Add username"><i class="fas fa-plus"></i></li>`;
+            $(".group_users").prepend(add);
+        }
+    });
+
+
+    
+    $(document).on('click', '.fa-plus', function() {
+
+        var new_user = $(".add_usr").val();
+
+        var friends = [];
+        var lnx = $('.chat-list .lom .name');
+        for (let i = 0; i < lnx.length; i++) {
+            friends.push(lnx[i].textContent.slice(1));
+        }
+        var include = 0;
+        
+        if (friends.includes(new_user)){
+            include = 1;
+        }
+
+        if(include == 1){
+            
+            // ajax la svr
+        }
+        else{
+            $(".fa-plus").toggleClass("fa-plus-red");
+            setTimeout(() => {
+                $(".fa-plus").removeClass("fa-plus-red");
+            }, 2000);
+        }
+
+    });
+});
 
 
 
