@@ -402,12 +402,131 @@ app.post("/group_users", function(request,response){
     });
 
 });
-// app.post("/online_status", function(request,response){
-//     var arr = request.body.arr;
-//     console.log(user);
+
+//add member to group
+
+
+app.post("/add_member_to_group", function(request,response){
+    var new_user = request.body.new_memb;
+    var gn = request.body.group_name;
+    var g_users_lenght = request.body.len;
+
+    seen_list = [];
+    //update seen
+    for(var i = 0; i<g_users_lenght; i++){
+        
+        seen_list.push(0);
+    
+    }
+
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("group_messages").updateOne({group_name: { $eq: gn}},{$set: { users_seen : seen_list}});
+        dbc.collection("group_messages").updateOne(
+            {group_name: { $eq: gn}},
+                {
+                $push: {
+                    users:new_user
+                }
+                }
+            )
+
+        dbc.collection("group_messages").updateOne(
+            {group_name: { $eq: gn}},
+                {
+                $push: {
+                    users_seen: 0
+                }
+                }
+            )
+
+        dbc.collection("accounts").updateOne(
+            {username: { $eq: new_user}},
+                {
+                $push: {
+                    groups: gn
+                }
+                }
+            )
+
+        db.close();
+    });
+
+    if(users_list.includes(new_user)){
+        for (var j in users){
+            // console.log(j + ":" + send_update[i]);
+            if (users[j] == new_user){
+                
+                to = j;
+                // console.log(to);
+                io.to(to).emit('add_group', gn);
+            }
+        }
+    }
+
+});
+
+//delete member from group
+app.post("/delete_member_from_group", function(request,response){
+    var om = request.body.om;
+    var gn = request.body.gr;
+    var g_users_lenght = request.body.len;
+
+    seen_list = [];
+    //update seen
+    for(var i = 0; i<g_users_lenght; i++){
+        
+        seen_list.push(0);
+        
+    }
+
+    MongoClient.connect(uri, function(err, db) {
+        var dbc = db.db("chat");
+        dbc.collection("group_messages").updateOne({group_name: { $eq: gn}},{$set: { users_seen : seen_list}});
+        dbc.collection("group_messages").updateOne(
+            {group_name: { $eq: gn}},
+                {
+                $pull: {
+                    users:om
+                }
+                }
+            )
+        dbc.collection("group_messages").updateOne(
+            {group_name: { $eq: gn}},
+                {
+                $pull: {
+                    users_seen:0
+                }
+                }
+            )
+
+
+        dbc.collection("accounts").updateOne(
+            {username: { $eq: om}},
+                {
+                $pull: {
+                    groups: gn
+                }
+                }
+            )
+
+        db.close();
+    });
+
+    if(users_list.includes(om)){
+        for (var j in users){
+            // console.log(j + ":" + send_update[i]);
+            if (users[j] == om){
+                
+                to = j;
+                // console.log(to);
+                io.to(to).emit('remove_group', gn);
+            }
+        }
+    }
     
 
-// });
+});
 
 
 //socket 

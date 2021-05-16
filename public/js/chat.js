@@ -768,11 +768,22 @@ $(document).ready(function() {
     $(document).on('click', '.fa-plus', function() {
 
         var new_user = $(".add_usr").val();
-
+        var gn = $(".grup").text();
+        var len = $(".group_usr").length;
+        if ($('.add_usr').is(':visible')){
+            len = len - 1;
+        }
+        
         var friends = [];
         var lnx = $('.chat-list .lom .name');
         for (let i = 0; i < lnx.length; i++) {
             friends.push(lnx[i].textContent.slice(1));
+        }
+
+        var g_users = [];
+        var lnxx = $('.group_users .group_usr');
+        for (let i = 0; i < lnxx.length; i++) {
+            g_users.push(lnxx[i].textContent.slice(1));
         }
         var include = 0;
         
@@ -780,9 +791,25 @@ $(document).ready(function() {
             include = 1;
         }
 
+        if (g_users.includes(new_user)){
+            include = 0;
+        }
+
         if(include == 1){
             
-            // ajax la svr
+            $.ajax({
+                url: "/add_member_to_group",
+                type: "POST",
+                dataType: 'text',
+                data: {new_memb:new_user, group_name:gn, len:len},
+                success: function (res){
+                    
+                }
+            });
+
+            $(".add_usr").parent().remove();
+            var add = `<li class="group_usr">@${new_user}<i class="far fa-times-circle"></i></li>`;
+            $(".group_users").prepend(add);
         }
         else{
             $(".fa-plus").toggleClass("fa-plus-red");
@@ -794,6 +821,30 @@ $(document).ready(function() {
     });
 });
 
+//delete member from group
+
+$(document).on('click', '.fa-times-circle', function() {
+    var om = $(this).parent().text().slice(1);
+    var gr = $(".grup").text();
+    var len = $(".group_usr").length;
+    if ($('.add_usr').is(':visible')){
+        len = len - 1;
+    }
+    
+
+        $.ajax({
+            url: "/delete_member_from_group",
+            type: "POST",
+            dataType: 'text',
+            data: {gr:gr, om:om, len:len},
+            success: function (res){
+                
+            }
+        });
+        $(this).parent().remove();
+
+    
+});
 
 
 
@@ -904,6 +955,21 @@ socket.on('seen_client',(data)=>{//seen status update
 socket.on('add_group',(data)=>{//status online offline users
     var gdiv = `<li class="lgrup">${data}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
     $(".group-list").prepend(gdiv);
+});
+
+socket.on('remove_group',(data)=>{//status online offline users
+    console.log(data);
+    $(`.lgrup:contains(${data})`).remove();
+
+    if ($('.grup').is(':visible')){
+        if($(".grup").text() == data){
+            $(".grup").remove();
+            $(".begin").css("display", "block");
+            $(".right").css("display", "none");
+        }
+    };
+    // var gdiv = `<li class="lgrup">${data}<div class="status"><div class="fas fa-envelope"></div></div></li>`;
+    // $(".group-list").prepend(gdiv);
 });
 
 socket.on('populate_group',(data)=>{//populate group
