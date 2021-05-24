@@ -96,7 +96,7 @@ setTimeout(seen_status_group, 500);
 
 // 5.15.137.48:44444/
 //conect to server socket
-var socket = io.connect("http://localhost:80/");
+var socket = io.connect("http://localhost/");
 socket.emit("set_online", user_name);
 
 
